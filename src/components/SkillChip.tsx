@@ -7,13 +7,16 @@ export default function SkillChip({ entry, setSkillObject, skillObject }: any) {
 
     function handleClick() {
         setClicked(!clicked)
-        if (clicked) {
-            skillObject[entry.key] = entry
-            setSkillObject(skillObject)
+
+        // hack for now: don't want to force update needlessly but reading prev clicked val bc of React functionality
+        const newObject = {...skillObject}
+
+        if (!clicked) {
+            newObject[entry.key] = entry
         } else {
-            delete skillObject[entry.key]
-            setSkillObject(skillObject)
+            delete newObject[entry.key]
         }
+        setSkillObject(newObject)
     }
 
   return (

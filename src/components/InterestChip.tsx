@@ -7,13 +7,17 @@ export default function InterestChip({ entry, setInterestObject, interestObject 
 
     function handleClick() {
         setClicked(!clicked)
-        if (clicked) {
-            interestObject[entry.key] = entry
-            setInterestObject(interestObject)
+
+        const newObject = {...interestObject}
+
+        // hack for now: don't want to force update needlessly but reading prev clicked val bc of React functionality
+        if (!clicked) {
+            newObject[entry.key] = entry
         } else {
-            delete interestObject[entry.key]
-            setInterestObject(interestObject)
+            delete newObject[entry.key]
         }
+        
+        setInterestObject(newObject)
     }
 
   return (

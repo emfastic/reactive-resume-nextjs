@@ -6,15 +6,17 @@ export default function EducationChip({ entry, setEducationObject, educationObje
 
     function handleClick() {
         setClicked(!clicked)
+
+        const newObject = {...educationObject}
+
+        // hack for now: don't want to force update needlessly but reading prev clicked val bc of React functionality
         if (!clicked) {
-            const newObject = {...educationObject}
             newObject[entry.key] = entry
-            setEducationObject(newObject)
           } else {
-            const newObject = {...educationObject}
             delete newObject[entry.key]
-            setEducationObject(newObject)
         }
+
+        setEducationObject(newObject)
     }
     
 

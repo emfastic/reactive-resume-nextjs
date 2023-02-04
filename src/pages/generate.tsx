@@ -33,6 +33,8 @@ import InterestChip from '../components/InterestChip';
 import WorkExperienceChip from "../components/WorkExperienceChip";
 import SkillChip from "../components/SkillChip";
 import EducationResumeSection from '../components/EducationResumeSection';
+import WorkExperienceResumeSection from "../components/WorkExperienceResumeSection";
+import SkillsInterestsResumeSection from "../components/SkillsInterestsResumeSection";
 
 export default function Generate() {
   const router = useRouter();
@@ -178,7 +180,7 @@ export default function Generate() {
 
       <Flex>
         <Flex w="50%" justifyContent="center" alignItems='center' pt="5" pb="5">
-          <Accordion defaultIndex={[0, 1, 2, 3]} w="xl" allowMultiple>
+          <Accordion defaultIndex={[0, 1, 2, 3]} w="xl" allowToggle={false}>
             <AccordionItem>
               <h2>
                 <AccordionButton>
@@ -263,43 +265,11 @@ export default function Generate() {
             </CardHeader>
 
             <CardBody>
-              <Stack divider={<StackDivider />} spacing="4">
+              <Stack spacing="4">
                 <EducationResumeSection educationObject={educationObject}/>
-                <Box>
-                  <Heading size="sm" textTransform="uppercase">
-                    Work Experience
-                  </Heading>
-                  Check out the overview of your clients.
-                </Box>
-                <Box>
-                  <Heading size="sm" textTransform="uppercase">
-                    Projects
-                  </Heading>
-                  <Box textAlign={'right'}>
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.
-                  See a detailed analysis of all your business clients.See a detailed analysis of all your business clients.
-                  </Box>
-                </Box>
-              </Stack>
+                <WorkExperienceResumeSection workExperienceObject={experienceObject}/>
+                <SkillsInterestsResumeSection skillObject={skillObject} interestObject={interestObject} />
+                </Stack>
             </CardBody>
           </Card>
         </Flex>

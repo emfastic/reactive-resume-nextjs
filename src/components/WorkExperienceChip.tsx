@@ -7,13 +7,17 @@ export default function WorkExperienceChip({ entry, setExperienceObject, experie
 
     function handleClick() {
         setClicked(!clicked)
-        if (clicked) {
-            experienceObject[entry.key] = entry
-            setExperienceObject(experienceObject)
+
+        const newObject = {...experienceObject}
+
+        // hack for now: don't want to force update needlessly but reading prev clicked val bc of React functionality
+        if (!clicked) {
+            newObject[entry.key] = entry
         } else {
-            delete experienceObject[entry.key]
-            setExperienceObject(experienceObject)
+            delete newObject[entry.key]
         }
+
+        setExperienceObject(newObject)
     }
 
   return (
