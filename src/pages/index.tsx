@@ -21,7 +21,7 @@ import ResumeCard from "../components/ResumeCard";
 import LoginModal from "../components/LoginModal";
 import { auth, provider, writeUserData, dbRef } from "../server/index.js";
 import { onValue, child } from "firebase/database";
-import { signInWithPopup } from "firebase/auth";
+import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
 
 export default function Home() {
@@ -29,9 +29,11 @@ export default function Home() {
   const [user, setUser] = useState();
   const router = useRouter();
 
-  if (user && typeof window !== "undefined") {
-    router.push("/profile");
-  }
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      router.push('/profile')
+    }}
+  )
 
   function handleSignIn() {
     signInWithPopup(auth, provider).then((result) => {

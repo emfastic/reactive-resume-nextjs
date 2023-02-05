@@ -1,13 +1,4 @@
-import docx, { convertInchesToTwip } from "docx";
-
-const {
-  AlignmentType,
-  Document,
-  Paragraph,
-  TabStopPosition,
-  TabStopType,
-  TextRun,
-} = docx;
+import { AlignmentType, convertInchesToTwip, Document, LevelFormat, Paragraph, TabStopPosition, TabStopType, TextRun } from "docx"
 
 const fontType = "Times New Roman";
 
@@ -27,14 +18,14 @@ export class DocumentCreator {
             levels: [
               {
                 level: 0,
-                format: docx.LevelFormat.BULLET,
+                format: LevelFormat.BULLET,
                 text: "\u2981",
-                alignment: docx.AlignmentType.LEFT,
+                alignment: AlignmentType.LEFT,
                 style: {
                   paragraph: {
                     indent: {
-                      left: docx.convertInchesToTwip(0.1),
-                      hanging: docx.convertInchesToTwip(0.12),
+                      left: convertInchesToTwip(0.1),
+                      hanging: convertInchesToTwip(0.12),
                     },
                   },
                 },
@@ -359,9 +350,9 @@ export class DocumentCreator {
     let researchArray = [];
     let extracurricularArray = [];
     experienceObjArray.forEach((experience) => {
-      if (experience.section === "Work") {
+      if (experience.experienceType === "Work") {
         workArray.push(experience);
-      } else if (experience.section === "Research") {
+      } else if (experience.experienceType === "Research") {
         researchArray.push(experience);
       } else {
         extracurricularArray.push(experience);
@@ -451,12 +442,12 @@ export class DocumentCreator {
     let languageArray = [];
     let interestArray = [];
     skillsObjArray.forEach((skill) => {
-      if (skill.tag === "Language") {
+      if (skill.skillType === "Language") {
         languageArray.push(skill.skill);
-      } else if (skill.tag === "Technical Skill") {
+      } else if (skill.skillType === "Technical Skill") {
         technicalArray.push(skill.skill);
       } else {
-        interestArray.push(skill.skill);
+        interestArray.push(skill.interest);
       }
     });
     return {
@@ -493,9 +484,9 @@ export class DocumentCreator {
       "07": "July",
       "08": "August",
       "09": "September",
-      10: "October",
-      11: "November",
-      12: "December",
+      "10": "October",
+      "11": "November",
+      "12": "December",
     };
 
     return date === "Present"

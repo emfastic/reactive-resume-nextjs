@@ -5,6 +5,27 @@ export default function WorkExperienceChip({ entry, setExperienceObject, experie
 
     const [clicked, setClicked] = useState(false)
 
+    function formatDate(date: string): string {
+      const months: {[key: string]: string} = {
+        "01": "January",
+        "02": "February",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "June",
+        "07": "July",
+        "08": "August",
+        "09": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December",
+      };
+  
+      return date === "Present"
+        ? date
+        : months[date.slice(5)] + " " + date.slice(0, 4);
+    }
+
     function handleClick() {
         setClicked(!clicked)
 
@@ -34,8 +55,8 @@ export default function WorkExperienceChip({ entry, setExperienceObject, experie
               {entry.experienceType}
             </Badge>
             <TagLabel>
-              {entry.organization}, {entry.position}, {entry.startDate} -{" "}
-              {entry.endDate}
+              {entry.organization}, {entry.title}, {formatDate(entry.startDate)} -{" "}
+              {formatDate(entry.endDate)}
             </TagLabel>
           </Tag>
         </Box>

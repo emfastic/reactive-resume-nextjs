@@ -18,6 +18,27 @@ export default function EducationChip({ entry, setEducationObject, educationObje
 
         setEducationObject(newObject)
     }
+
+    function formatDate(date: string): string {
+      const months: {[key: string]: string} = {
+        "01": "January",
+        "02": "February",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "June",
+        "07": "July",
+        "08": "August",
+        "09": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December",
+      };
+  
+      return date === "Present"
+        ? date
+        : months[date.slice(5)] + " " + date.slice(0, 4);
+    }
     
 
   return (
@@ -31,7 +52,7 @@ export default function EducationChip({ entry, setEducationObject, educationObje
           onClick={handleClick}
         >
           <TagLabel>
-            {entry.school}, {entry.major}, {entry.gradDate}
+            {entry.school}, {entry.major}, {formatDate(entry.gradDate)}
           </TagLabel>
         </Tag>
       </Box>

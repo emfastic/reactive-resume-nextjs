@@ -88,7 +88,7 @@ export type ExperienceDrawerProps = {
 export type WorkExperience = {
     experienceType: string,
     organization: string,
-    position: string,
+    title: string,
     location: string,
     startDate: string,
     endDate: string,

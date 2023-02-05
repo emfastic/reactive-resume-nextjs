@@ -35,28 +35,32 @@ import SkillChip from "../components/SkillChip";
 import EducationResumeSection from '../components/EducationResumeSection';
 import WorkExperienceResumeSection from "../components/WorkExperienceResumeSection";
 import SkillsInterestsResumeSection from "../components/SkillsInterestsResumeSection";
+import { onAuthStateChanged } from "firebase/auth";
+import { DocumentCreator } from '../server/resume'
+import { Packer } from "docx";
+import { saveAs } from 'file-saver'
 
 export default function Generate() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (auth.currentUser) {
-      onValue(child(dbRef, `users/${auth.currentUser.uid}`), (snapshot) => {
-        if (typeof window !== "undefined") {
-          if (snapshot.exists()) {
-            setUser(snapshot.val());
-          } else {
-            setUser(snapshot.val());
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        onValue(child(dbRef, `users/${user.uid}`), (snapshot) => {
+          if (typeof window !== "undefined") {
+            if (snapshot.exists()) {
+              setUser(snapshot.val());
+            } else {
+              setUser(snapshot.val());
+            }
           }
-        }
-      });
-    }
+        });
+      } else {
+        router.push("/");    
+      }
+    })
   }, []);
-
-  if (!auth.currentUser && typeof window !== "undefined") {
-    router.push("/");
-  }
 
   let experienceEntries: WorkExperience[] = [];
   let educationEntries: EducationExperience[] = [];
@@ -150,10 +154,32 @@ export default function Generate() {
     );
   });
 
-  // const [selectedEducation, setSelectedEducation] = useState<EducationExperience[]>([])
-  // const [selectedWorkExperiences, setSelectedWorkExperiences] = useState<WorkExperience[]>([])
-  // const [selectedSkills, setSelectedSkills] = useState<Skill[]>([])
-  // const [selectedInterests, setSelectedInterests] = useState<Interest[]>([])
+  function generate() {
+    if (
+      Object.entries(experienceObject).length === 0 &&
+      Object.entries(educationObject).length === 0 &&
+      Object.entries(skillObject).length === 0 &&
+      Object.entries(interestObject).length === 0
+    ) {
+      alert("Select experiences by clicking on them to add to your resume!");
+      return;
+    }
+    const documentCreator = new DocumentCreator();
+    const doc = documentCreator.create([
+      experienceObject,
+      educationObject,
+      {...skillObject, ...interestObject},
+      user,
+    ]);
+
+    Packer.toBlob(doc).then((blob) => {
+      console.log(blob);
+      saveAs(
+        blob,
+        `${user!.firstName} ${user!.lastName} Resume.docx`
+      );
+    });
+  }
 
 
   return (
@@ -174,13 +200,13 @@ export default function Generate() {
             router.push("/profile");
           }}
         />
-        <Button>Generate Resume</Button>
+        <Button onClick={generate}>Generate Resume</Button>
       </Flex>
       <Divider />
 
       <Flex>
         <Flex w="50%" justifyContent="center" alignItems='center' pt="5" pb="5">
-          <Accordion defaultIndex={[0, 1, 2, 3]} w="xl" allowToggle={false}>
+          <Accordion defaultIndex={[0, 1, 2, 3]} w="2xl" allowToggle={false}>
             <AccordionItem>
               <h2>
                 <AccordionButton>
@@ -251,16 +277,14 @@ export default function Generate() {
               </AccordionPanel>
             </AccordionItem>
           </Accordion>
-        {/* </Flex> */}
         </Flex>
-        {/* <Flex justify={"center"} w="50%" bg="red"> */}
           <Card mt="4" w='50%'>
             <CardHeader textAlign="center">
               <Heading size="md" mb="1">
-                Jake Ottiger
+                {user ? `${user.firstName} ${user.lastName}` : ''}
               </Heading>
               <Heading size="md" fontWeight="normal">
-                ottigerj@bc.edu  | 216-225-2483 | linkedin.com/in/jakeottiger
+                {user ? `${user.email} | ${user.phoneNumber} | ${user.website}` : ""}
               </Heading>
             </CardHeader>
 

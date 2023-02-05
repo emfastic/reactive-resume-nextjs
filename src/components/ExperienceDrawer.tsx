@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -29,20 +29,36 @@ export default function ExperienceDrawer({
 }: ExperienceDrawerProps) {
   const experienceType = useRef<any>(null);
   const organization = useRef<any>(null);
-  const position = useRef<any>(null);
+  const title = useRef<any>(null);
   const location = useRef<any>(null);
   const startDate = useRef<any>(null);
   const endDate = useRef<any>(null);
   const description = useRef<any>(null);
 
+  const [descriptionValue, setDescriptionValue] = useState("\u2022 ")
+
+  function convertDescriptionToCSV(description: string) {
+    let descriptionStr: string = description
+      .replaceAll("\u2022 ", "")
+      .trim();
+    let descriptionArray: string[] = descriptionStr.split("\n\n");
+
+    descriptionArray.forEach((element, idx) => {
+      descriptionArray[idx] =
+        element.charAt(0).toUpperCase() + element.slice(1);
+    });
+
+    return descriptionArray.join(",");
+  }
+
   function clearData() {
     experienceType.current.value = "";
     organization.current.value = "";
-    position.current.value = "";
+    title.current.value = "";
     location.current.value = "";
     startDate.current.value = "";
     endDate.current.value = "";
-    description.current.value = "";
+    description.current.value = "\u2022 ";
   }
 
   function closeDrawer() {
@@ -54,31 +70,47 @@ export default function ExperienceDrawer({
   function handleSubmit() {
     if (isEdit) {
       updateExperience("experiences", formData.key, {
-        section: experienceType.current.value,
+        experienceType: experienceType.current.value,
         organization: organization.current.value,
-        position: position.current.value,
+        title: title.current.value,
         location: location.current.value,
         startDate: startDate.current.value,
         endDate: endDate.current.value,
-        description: description.current.value,
+        description: convertDescriptionToCSV(description.current.value),
       });
     } else {
       updateKeyedObjectSection(
         [
           {
-            section: experienceType.current.value,
+            experienceType: experienceType.current.value,
             organization: organization.current.value,
-            position: position.current.value,
+            title: title.current.value,
             location: location.current.value,
             startDate: startDate.current.value,
             endDate: endDate.current.value,
-            description: description.current.value,
+            description: convertDescriptionToCSV(description.current.value),
           },
         ],
         "experiences"
       );
     }
     clearData();
+  }
+
+  function handleChange(event: any) {
+    // Get the current value of the input box
+    let currVal = event.target.value;
+
+    // Check if the user has pressed the return key
+    if (event.key === "Enter") {
+      // Add two new lines and a bullet and a space to the value
+      const newValue = `${currVal}\n\n\u2022 `;
+
+      // Update the value of the input box
+      event.target.value = newValue;
+      event.preventDefault();
+    }
+    setDescriptionValue(event.target.value);
   }
 
   return (
@@ -122,11 +154,11 @@ export default function ExperienceDrawer({
               />
             </Box>
             <Box>
-              <FormLabel htmlFor="position">Position</FormLabel>
+              <FormLabel htmlFor="title">Position</FormLabel>
               <Input
-                ref={position}
-                defaultValue={isEdit ? formData.position : ""}
-                id="position"
+                ref={title}
+                defaultValue={isEdit ? formData.title : ""}
+                id="title"
                 placeholder="Position Title"
               />
             </Box>
@@ -167,6 +199,9 @@ export default function ExperienceDrawer({
                 size="xs"
                 placeholder={`${"\u2022"} Descriptive Bullet 1\n${"\u2022"} Descriptive Bullet 2\n${"\u2022"} Descriptive Bullet 3`}
                 ref={description}
+                onChange={handleChange}
+                onKeyDown={handleChange}
+                value={descriptionValue}
                 defaultValue={isEdit ? formData.description : ""}
               />
             </Box>

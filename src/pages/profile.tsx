@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@chakra-ui/button";
 import { Avatar } from "@chakra-ui/avatar";
 import { useDisclosure } from "@chakra-ui/react-use-disclosure";
-import ChangingDrawer from "@/components/ChangingDrawer";
 import ProfileModal from "@/components/ProfileModal";
 import {
   Accordion,
@@ -31,6 +30,7 @@ import EducationDrawer from "../components/EducationDrawer";
 import ExperienceDrawer from "../components/ExperienceDrawer";
 import SkillDrawer from "../components/SkillDrawer";
 import InterestDrawer from "../components/InterestDrawer";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function Profile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,9 +64,6 @@ export default function Profile() {
     onClose: onInterestDrawerClose,
   } = useDisclosure();
 
-  const [drawerType, setDrawerType] = useState<
-    "" | "skill" | "interest" | "education" | "experience"
-  >("");
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isEdit, setIsEdit] = useState(false);
@@ -83,7 +80,7 @@ export default function Profile() {
   const [experienceFormData, setExperienceFormData] = useState<WorkExperience>({
     experienceType: "",
     organization: "",
-    position: "",
+    title: "",
     location: "",
     startDate: "",
     endDate: "",
@@ -100,18 +97,22 @@ export default function Profile() {
   })
 
   useEffect(() => {
-    if (auth.currentUser) {
-      onValue(child(dbRef, `users/${auth.currentUser.uid}`), (snapshot) => {
-        if (typeof window !== "undefined") {
-          if (snapshot.exists()) {
-            setUser(snapshot.val());
-          } else {
-            setUser(snapshot.val());
-            onModalOpen();
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        onValue(child(dbRef, `users/${user.uid}`), (snapshot) => {
+          if (typeof window !== "undefined") {
+            if (snapshot.exists()) {
+              setUser(snapshot.val());
+            } else {
+              setUser(snapshot.val());
+              onModalOpen()
+            }
           }
-        }
-      });
-    }
+        });
+      } else {
+        router.push("/");    
+      }
+    })
   }, []);
 
   if (!auth.currentUser && typeof window !== "undefined") {
@@ -122,6 +123,27 @@ export default function Profile() {
   let educationEntries: EducationExperience[] = [];
   let skillEntries: Skill[] = [];
   let interestEntries: Interest[] = [];
+
+  function formatDate(date: string): string {
+    const months: {[key: string]: string} = {
+      "01": "January",
+      "02": "February",
+      "03": "March",
+      "04": "April",
+      "05": "May",
+      "06": "June",
+      "07": "July",
+      "08": "August",
+      "09": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December",
+    };
+
+    return date === "Present"
+      ? date
+      : months[date.slice(5)] + " " + date.slice(0, 4);
+  }
 
   function compareSkills(a: Skill, b: Skill) {
     if (a.skillType < b.skillType) {
@@ -218,8 +240,8 @@ export default function Profile() {
               {entry.experienceType}
             </Badge>
             <TagLabel>
-              {entry.organization}, {entry.position}, {entry.startDate} -{" "}
-              {entry.endDate}
+              {entry.organization}, {entry.title}, {formatDate(entry.startDate)} -{" "}
+              {formatDate(entry.endDate)}
             </TagLabel>
             <TagCloseButton />
           </Tag>
@@ -285,7 +307,7 @@ export default function Profile() {
           }}
         >
           <TagLabel>
-            {entry.school}, {entry.major}, {entry.gradDate}
+            {entry.school}, {entry.major}, {formatDate(entry.gradDate)}
           </TagLabel>
           <TagCloseButton />
         </Tag>
@@ -371,14 +393,6 @@ export default function Profile() {
             </Box>
           </VStack>
         </Center>
-
-        <ChangingDrawer
-          isOpen={isOpen}
-          onClose={onClose}
-          drawerType={drawerType}
-          educationFormData={educationFormData}
-          isEdit={isEdit}
-        />
 
         <EducationDrawer
           isOpen={isEducationDrawerOpen}
