@@ -10,6 +10,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  Flex,
   FormLabel,
   Input,
   Select,
@@ -77,10 +78,12 @@ export default function InterestDrawer({ isOpen, onClose, formData, isEdit, setE
         </DrawerBody>
 
         <DrawerFooter borderTopWidth="1px">
+        <Flex justify={'space-between'} alignItems='left'>
           <Button variant="outline" mr={3} onClick={clearData}>
             Clear
           </Button>
           <Button colorScheme="blue" onClick={handleSubmit}>{isEdit ? "Edit" : "Submit"}</Button>
+          </Flex>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

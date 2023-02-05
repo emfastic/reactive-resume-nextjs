@@ -154,6 +154,17 @@ export default function Generate() {
     );
   });
 
+  function formatPhoneNum(phone: string): string {
+    let formattedPhone = "(" +
+      phone.substring(0, 3) +
+      ") " +
+      phone.substring(3, 6) +
+      "-" +
+      phone.substring(6)
+
+    return phone !== "" ? formattedPhone : "";
+  }
+
   function generate() {
     if (
       Object.entries(experienceObject).length === 0 &&
@@ -281,10 +292,10 @@ export default function Generate() {
           <Card mt="4" w='50%'>
             <CardHeader textAlign="center">
               <Heading size="md" mb="1">
-                {user ? `${user.firstName} ${user.lastName}` : ''}
+                {user && user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : ''}
               </Heading>
               <Heading size="md" fontWeight="normal">
-                {user ? `${user.email} | ${user.phoneNumber} | ${user.website}` : ""}
+                {user && user.email && user.phoneNumber && user.website ? `${user.email} | ${formatPhoneNum(user.phoneNumber)} | ${user.website}` : ""}
               </Heading>
             </CardHeader>
 

@@ -390,7 +390,7 @@ export class DocumentCreator {
             this.formatDate(experience.startDate),
             this.formatDate(experience.endDate)
           ),
-          ...this.createBullets(experience.description.split(","))
+          ...this.createBullets(experience.description.split(",,"))
         );
         experienceArray.push(new Paragraph({ children: [] }));
       });
@@ -408,7 +408,7 @@ export class DocumentCreator {
             this.formatDate(experience.startDate),
             this.formatDate(experience.endDate)
           ),
-          ...this.createBullets(experience.description.split(","))
+          ...this.createBullets(experience.description.split(",,"))
         );
         experienceArray.push(new Paragraph({ children: [] }));
       });
@@ -428,7 +428,7 @@ export class DocumentCreator {
             this.formatDate(experience.startDate),
             this.formatDate(experience.endDate)
           ),
-          ...this.createBullets(experience.description.split(","))
+          ...this.createBullets(experience.description.split(",,"))
         );
         experienceArray.push(new Paragraph({ children: [] }));
       });

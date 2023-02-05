@@ -16,6 +16,7 @@ import {
   Stack,
   Textarea,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { ExperienceDrawerProps } from "@/types/component";
 import { updateExperience, updateKeyedObjectSection } from "@/server";
@@ -35,6 +36,8 @@ export default function ExperienceDrawer({
   const endDate = useRef<any>(null);
   const description = useRef<any>(null);
 
+  const editSuccessToast = useToast()
+
   const [descriptionValue, setDescriptionValue] = useState("\u2022 ")
 
   function convertDescriptionToCSV(description: string) {
@@ -48,7 +51,7 @@ export default function ExperienceDrawer({
         element.charAt(0).toUpperCase() + element.slice(1);
     });
 
-    return descriptionArray.join(",");
+    return descriptionArray.join(",,");
   }
 
   function clearData() {
@@ -78,6 +81,12 @@ export default function ExperienceDrawer({
         endDate: endDate.current.value,
         description: convertDescriptionToCSV(description.current.value),
       });
+      closeDrawer()
+      editSuccessToast({
+        title: "Successfully updated item!",
+        status: "success",
+        duration: 3000
+      })
     } else {
       updateKeyedObjectSection(
         [
@@ -93,8 +102,8 @@ export default function ExperienceDrawer({
         ],
         "experiences"
       );
+      clearData();
     }
-    clearData();
   }
 
   function handleChange(event: any) {
@@ -111,6 +120,16 @@ export default function ExperienceDrawer({
       event.preventDefault();
     }
     setDescriptionValue(event.target.value);
+  }
+
+  function convertCSVToBullets(description: string) {
+    let descriptionList = description.split(',,')
+
+    descriptionList.forEach((value, idx) => {
+      descriptionList[idx] = "\u2022 " + value
+    })
+
+    return descriptionList.join('\n\n')
   }
 
   return (
@@ -201,18 +220,19 @@ export default function ExperienceDrawer({
                 ref={description}
                 onChange={handleChange}
                 onKeyDown={handleChange}
-                value={descriptionValue}
-                defaultValue={isEdit ? formData.description : ""}
+                defaultValue={isEdit ? convertCSVToBullets(formData.description) : "\u2022 "}
               />
             </Box>
           </Stack>
         </DrawerBody>
 
         <DrawerFooter borderTopWidth="1px">
+          <Flex justify={'space-between'} alignItems='left'>
           <Button variant="outline" mr={3} onClick={clearData}>
             Clear
           </Button>
           <Button colorScheme="blue" onClick={handleSubmit}>{isEdit ? "Edit" : "Submit"}</Button>
+          </Flex>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

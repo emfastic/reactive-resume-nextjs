@@ -14,9 +14,11 @@ import {
   Tag,
   TagCloseButton,
   TagLabel,
-  Heading
+  Heading,
+  useToast,
+  Toast
 } from "@chakra-ui/react";
-import { auth, dbRef } from "../server/index.js";
+import { auth, dbRef, removeData } from "../server/index.js";
 import { useRouter } from "next/router";
 import { onValue, child } from "firebase/database";
 import {
@@ -33,7 +35,6 @@ import InterestDrawer from "../components/InterestDrawer";
 import { onAuthStateChanged } from "firebase/auth";
 
 export default function Profile() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isModalOpen,
     onOpen: onModalOpen,
@@ -65,6 +66,9 @@ export default function Profile() {
   } = useDisclosure();
 
   const router = useRouter();
+
+  const deleteToast = useToast()
+
   const [user, setUser] = useState<User | null>(null);
   const [isEdit, setIsEdit] = useState(false);
   const [educationFormData, setEducationFormData] =
@@ -222,6 +226,17 @@ export default function Profile() {
     onInterestDrawerOpen()
   }
 
+  function handleDelete(endpoint: string, entry: WorkExperience | EducationExperience | Skill | Interest) {
+
+    deleteToast({
+      title: "Entry was successfully deleted",
+      status: "info",
+      duration: 3000
+    })
+
+    removeData(endpoint, entry.key)
+  }
+
   const workExperienceItems = experienceEntries.map(
     (entry: WorkExperience) => {
       return (
@@ -232,18 +247,17 @@ export default function Profile() {
             variant="solid"
             colorScheme="blue"
             cursor={"pointer"}
-            onClick={() => {
-              editExperience(entry);
-            }}
           >
             <Badge variant="subtle" colorScheme="cyan" fontSize="sm" mr="2">
               {entry.experienceType}
             </Badge>
-            <TagLabel>
+            <TagLabel onClick={() => {
+              editExperience(entry);
+            }}>
               {entry.organization}, {entry.title}, {formatDate(entry.startDate)} -{" "}
               {formatDate(entry.endDate)}
             </TagLabel>
-            <TagCloseButton />
+            <TagCloseButton onClick={() => handleDelete('experiences', entry)}/>
           </Tag>
         </Box>
       );
@@ -259,15 +273,14 @@ export default function Profile() {
           variant="solid"
           colorScheme="red"
           cursor={"pointer"}
-          onClick={() => {
-            editSkill(entry);
-          }}
         >
           <Badge variant="subtle" colorScheme="cyan" fontSize="sm" mr="2">
             {entry.skillType}
           </Badge>
-          <TagLabel>{entry.skill}</TagLabel>
-          <TagCloseButton />
+          <TagLabel onClick={() => {
+            editSkill(entry);
+          }}>{entry.skill}</TagLabel>
+          <TagCloseButton onClick={() => handleDelete('skills', entry)}/>
         </Tag>
       </Box>
     );
@@ -282,12 +295,11 @@ export default function Profile() {
           variant="solid"
           colorScheme="yellow"
           cursor={"pointer"}
-          onClick={() => {
-            editInterest(entry);
-          }}
         >
-          <TagLabel>{entry.interest}</TagLabel>
-          <TagCloseButton />
+          <TagLabel onClick={() => {
+            editInterest(entry);
+          }}>{entry.interest}</TagLabel>
+          <TagCloseButton onClick={() => handleDelete('interests', entry)}/>
         </Tag>
       </Box>
     );
@@ -302,14 +314,13 @@ export default function Profile() {
           variant="solid"
           colorScheme="green"
           cursor={"pointer"}
-          onClick={() => {
-            editEducation(entry);
-          }}
         >
-          <TagLabel>
+          <TagLabel onClick={() => {
+            editEducation(entry);
+          }}>
             {entry.school}, {entry.major}, {formatDate(entry.gradDate)}
           </TagLabel>
-          <TagCloseButton />
+          <TagCloseButton onClick={() => handleDelete('education', entry)}/>
         </Tag>
       </Box>
     );
