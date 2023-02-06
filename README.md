@@ -14,6 +14,8 @@ Reactive Resume is built with the following technologies:
 
 - docx: A JavaScript library for creating and manipulating Microsoft Word files.
 
+- Formik: A form validation library.
+
 ## Features
 Reactive Resume offers the following features:
 
@@ -33,7 +35,7 @@ We're always working to improve Reactive Resume, and our next big feature is an 
 ## Conclusion
 Whether you're just starting out in your career or looking to take your resume to the next level, Reactive Resume is the perfect solution. With its cutting-edge tech stack and user-friendly interface, you can have a polished and formatted resume in no time. So why wait? Start building your Reactive Resume today!
 
-### Thanks for reading this ChatGPT generated README of Reactive Resume. As a perk, the two prompts I used to get the output are below.
+#### Thanks for reading this ChatGPT generated README of Reactive Resume. As a perk, the two prompts I used to get the output are below.
 
 Prompt 1: Write a README.md that describes a resume website named Reactive Resume. The tech stack is as follows: Nextjs, Firebase (Realtime Database, Authentication), Chakra UI, TypeScript. It utilizes a JavaScript library called "docx" to write the selected student experiences to their resume, formatting the resume automatically, and then downloading the resume to the user's computer. Be sure to include the following upcoming feature: using GPT-3 to generate resume bullets.
 
