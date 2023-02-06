@@ -310,7 +310,7 @@ export default function Generate() {
               <Stack spacing="4">
                 {Object.keys(educationObject).length !== 0 || Object.keys(experienceObject).length !== 0 || Object.keys(skillObject).length !== 0 || Object.keys(interestObject).length !== 0 ? <><EducationResumeSection educationObject={educationObject}/>
                 <WorkExperienceResumeSection workExperienceObject={experienceObject}/>
-                <SkillsInterestsResumeSection skillObject={skillObject} interestObject={interestObject} /></> : <><Heading textAlign='center'>Yikes your resume is empty</Heading> <Heading textAlign='center'>Start by adding experiences on the left</Heading></>}
+                <SkillsInterestsResumeSection skillObject={skillObject} interestObject={interestObject} /></> : <><Heading textAlign='center'>Oh no your resume is empty!</Heading> <Heading textAlign='center'>Start building by clicking on the experiences on the left!</Heading></>}
                 </Stack>
             </CardBody>
           </Card>

@@ -350,9 +350,9 @@ export class DocumentCreator {
     let researchArray = [];
     let extracurricularArray = [];
     experienceObjArray.forEach((experience) => {
-      if (experience.experienceType === "Work") {
+      if (experience.experienceType === "work") {
         workArray.push(experience);
-      } else if (experience.experienceType === "Research") {
+      } else if (experience.experienceType === "research") {
         researchArray.push(experience);
       } else {
         extracurricularArray.push(experience);
