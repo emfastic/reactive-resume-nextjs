@@ -33,6 +33,7 @@ import ExperienceDrawer from "../components/ExperienceDrawer";
 import SkillDrawer from "../components/SkillDrawer";
 import InterestDrawer from "../components/InterestDrawer";
 import { onAuthStateChanged } from "firebase/auth";
+import Head from "next/head";
 
 export default function Profile() {
   const {
@@ -328,6 +329,9 @@ export default function Profile() {
 
   return (
     <>
+    <Head>
+      <title>Reactive Resume</title>
+    </Head>
       <Flex
         alignItems={"center"}
         justifyContent="space-between"

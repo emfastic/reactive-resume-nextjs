@@ -23,6 +23,7 @@ import { auth, provider, writeUserData, dbRef } from "../server/index.js";
 import { onValue, child } from "firebase/database";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
+import Head from 'next/head'
 
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,6 +59,14 @@ export default function Home() {
 
   return (
     <>
+    <Head>
+      <title>Reactive Resume</title>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@jakeottiger" />
+        <meta name="twitter:title" content="Reactive Resume" />
+        <meta name="twitter:description" content="Show your value with a professional resume" />
+        <meta name="twitter:image" content="/website-ss.png" />
+    </Head>
       <Flex
         alignItems={"right"}
         justifyContent="space-between"
