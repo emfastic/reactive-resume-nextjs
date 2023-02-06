@@ -34,10 +34,6 @@ export default function ProfileModal({
   const toast = useToast()
 
 const firstName = useRef<any>(null)
-const lastName = useRef<any>(null)
-const phoneNumber = useRef<any>(null)
-const email = useRef<any>(null)
-const website = useRef<any>(null)
 
 function handleSubmit(values: any) {
   values.phoneNumber = values.phoneNumber.replace(/\D/g, "");
@@ -95,7 +91,7 @@ const validate = (values: any) => {
           {({ isSubmitting, handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
         <ModalHeader>Profile</ModalHeader>
-        <ModalCloseButton />
+        {user!.firstName && user!.lastName && user!.email && user!.phoneNumber ? <ModalCloseButton /> : <></>}
         <Divider />
         <ModalBody>
           <Center>

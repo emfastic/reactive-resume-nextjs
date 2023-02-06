@@ -60,13 +60,13 @@ export default function Home() {
     <>
       <Flex
         alignItems={"right"}
-        justifyContent="right"
+        justifyContent="space-between"
         paddingTop={"3"}
         paddingRight={"5"}
         paddingBottom={"3"}
       >
+        <Heading size='xl' ml='5'>Reactive Resume</Heading>
         <HStack as="nav" spacing={6}>
-          <Button>Example Resumes</Button>
           <LoginModal
             text="Get Started"
             isOpen={isOpen}

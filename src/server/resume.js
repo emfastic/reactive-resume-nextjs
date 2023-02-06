@@ -115,7 +115,7 @@ export class DocumentCreator {
       alignment: AlignmentType.CENTER,
       children: [
         new TextRun({
-          text: `${email} | ${phone} | ${website}`,
+          text: `${email} | ${phone}${website ? ` | ${website}` : ''}`,
           size: 26,
           font: {
             name: fontType,
@@ -442,9 +442,9 @@ export class DocumentCreator {
     let languageArray = [];
     let interestArray = [];
     skillsObjArray.forEach((skill) => {
-      if (skill.skillType === "Language") {
+      if (skill.skillType === "language") {
         languageArray.push(skill.skill);
-      } else if (skill.skillType === "Technical Skill") {
+      } else if (skill.skillType === "technical") {
         technicalArray.push(skill.skill);
       } else {
         interestArray.push(skill.interest);

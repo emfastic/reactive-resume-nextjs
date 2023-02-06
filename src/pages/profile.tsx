@@ -329,7 +329,7 @@ export default function Profile() {
   return (
     <>
       <Flex
-        alignItems={"left"}
+        alignItems={"center"}
         justifyContent="space-between"
         paddingTop={"3"}
         paddingLeft={"5"}
@@ -345,6 +345,8 @@ export default function Profile() {
             onModalOpen();
           }}
         />
+
+        <Heading size='xl' ml='100'>Reactive Resume</Heading>
 
         {user ? <ProfileModal
           isModalOpen={isModalOpen}
@@ -470,7 +472,7 @@ export default function Profile() {
               </h2>
               <AccordionPanel pb={4}>
                 <VStack spacing="2" alignItems="left">
-                  {workExperienceItems}
+                  {experienceEntries.length !== 0 ? workExperienceItems : <Heading size='md' textAlign='center'>Looking pretty empty here, add some experiences</Heading>}
                 </VStack>
               </AccordionPanel>
             </AccordionItem>

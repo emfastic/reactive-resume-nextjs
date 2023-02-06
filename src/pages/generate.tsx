@@ -19,10 +19,7 @@ import {
   CardBody,
   CardHeader,
   Stack,
-  StackDivider,
-  Tag,
-  TagCloseButton,
-  TagLabel,
+  useToast
 } from "@chakra-ui/react";
 import { auth, dbRef } from "../server/index.js";
 import { onValue, child } from "firebase/database"
@@ -61,6 +58,8 @@ export default function Generate() {
       }
     })
   }, []);
+
+  const toast = useToast()
 
   let experienceEntries: WorkExperience[] = [];
   let educationEntries: EducationExperience[] = [];
@@ -172,8 +171,12 @@ export default function Generate() {
       Object.entries(skillObject).length === 0 &&
       Object.entries(interestObject).length === 0
     ) {
-      alert("Select experiences by clicking on them to add to your resume!");
-      return;
+      toast({
+        title: "Oops! You didn't select any experiences!",
+        status: 'error',
+        duration: 3000
+      })
+      return; 
     }
     const documentCreator = new DocumentCreator();
     const doc = documentCreator.create([
@@ -301,9 +304,9 @@ export default function Generate() {
 
             <CardBody>
               <Stack spacing="4">
-                <EducationResumeSection educationObject={educationObject}/>
+                {Object.keys(educationObject).length !== 0 || Object.keys(experienceObject).length !== 0 || Object.keys(skillObject).length !== 0 || Object.keys(interestObject).length !== 0 ? <><EducationResumeSection educationObject={educationObject}/>
                 <WorkExperienceResumeSection workExperienceObject={experienceObject}/>
-                <SkillsInterestsResumeSection skillObject={skillObject} interestObject={interestObject} />
+                <SkillsInterestsResumeSection skillObject={skillObject} interestObject={interestObject} /></> : <><Heading textAlign='center'>Yikes your resume is empty</Heading> <Heading textAlign='center'>Start by adding experiences on the left</Heading></>}
                 </Stack>
             </CardBody>
           </Card>

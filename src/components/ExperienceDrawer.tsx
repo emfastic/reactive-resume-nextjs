@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -36,6 +36,8 @@ export default function ExperienceDrawer({
   const experienceType = useRef<any>(null)
 
   const successToast = useToast()
+
+  const [apiLoading, setAPILoading] = useState(false)
 
   function convertDescriptionToCSV(description: string) {
 
@@ -103,6 +105,33 @@ export default function ExperienceDrawer({
       form.setFieldValue('description', currVal);
     }
   }
+
+  const generateBullets = (e: any, form: any) => {
+    e.preventDefault();
+    setAPILoading(true);
+
+    const prompt = `Write 3 resume professional "\\u2022" points for a ${form.values.title} at ${form.values.organization}. If relevant to the position one should be quanitifiable.`
+  
+    fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+      }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      return response.json()
+    })
+    .then((answer) => {
+      form.setFieldValue('description', answer.choices[0].text);
+      setAPILoading(false);
+    })
+  };
 
   function convertCSVToBullets(description: string) {
     let descriptionList = description.split(',,')
@@ -173,6 +202,7 @@ export default function ExperienceDrawer({
         onSubmit={(values, { setSubmitting }) => {handleSubmit(values); setSubmitting(false)}}
         onReset={clearData}
         validate={validate}
+
         >
           {({ isSubmitting, handleSubmit, handleReset }) => (
             <Form onSubmit={handleSubmit} onReset={handleReset}>
@@ -299,6 +329,11 @@ export default function ExperienceDrawer({
           <Button variant="outline" mr={3} type='reset'>
             Clear
           </Button>
+          <Field name='apiButton'>
+                {({ field, form }: any) => (
+          <Button colorScheme="green" type='button' isDisabled={!form.values.organization || !form.values.title} onClick={(event) => generateBullets(event, form)} isLoading={apiLoading}>Write for Me</Button>
+          )}
+              </Field>
           <Button colorScheme="blue" type='submit' isLoading={isSubmitting}>{isEdit ? "Edit" : "Submit"}</Button>
         </DrawerFooter>
         </Form>
