@@ -20,8 +20,13 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   NumberInput,
+  FormControl,
+  FormErrorMessage,
+  useToast
 } from "@chakra-ui/react";
 import { updateExperience, updateKeyedObjectSection } from "@/server";
+import { Field, Form, Formik } from "formik";
+import { EducationExperience } from '@/types/component.js';
 
 export default function EducationDrawer({
   formData,
@@ -31,57 +36,69 @@ export default function EducationDrawer({
   setEdit,
 }: any) {
   const school = useRef<any>(null);
-  const location = useRef<any>(null);
-  const degreeType = useRef<any>(null);
-  const gradDate = useRef<any>(null);
-  const major = useRef<any>(null);
-  const minor = useRef<any>(null);
-  const [gpa, setGPA] = useState("0.00");
 
-  function clearData() {
-    school.current.value = "";
-    location.current.value = "";
-    degreeType.current.value = "";
-    gradDate.current.value = "";
-    major.current.value = "";
-    minor.current.value = "";
-    setGPA("0.00");
+  const successToast = useToast()
+
+  function clearData(values: EducationExperience) {
+    values.school = "";
+    values.location = "";
+    values.degreeType = "";
+    values.gradDate = "";
+    values.major = "";
+    values.minor = "";
+    values.gpa = "0.00";
+    // setGPA("0.00");
   }
 
-  function handleSubmit() {
+  function handleSubmit(values: EducationExperience) {
     if (isEdit) {
-      updateExperience("education", formData.key, {
-        school: school.current.value,
-        location: location.current.value,
-        degreeType: degreeType.current.value,
-        gradDate: gradDate.current.value,
-        major: major.current.value,
-        minor: minor.current.value,
-        gpa: gpa,
-      });
+      updateExperience("education", formData.key, values);
+      closeDrawer()
+      successToast({
+        title: "Successfully updated education!",
+        status: 'success',
+        duration: 3000
+      })
     } else {
       updateKeyedObjectSection(
         [
-          {
-            school: school.current.value,
-            location: location.current.value,
-            degreeType: degreeType.current.value,
-            gradDate: gradDate.current.value,
-            major: major.current.value,
-            minor: minor.current.value,
-            gpa: gpa,
-          },
+          values,
         ],
         "education"
       );
+      successToast({
+        title: "Successfully added education!",
+        status: 'success',
+        duration: 3000
+      })
     }
-    clearData();
+    clearData(values);
   }
 
   function closeDrawer() {
-    clearData();
     setEdit(false);
     onClose();
+  }
+
+  const validate = (values: EducationExperience) => {
+    const errors: any = {}
+
+    if (!values.school) {
+      errors.school = 'School name required'
+    }
+    if (!values.degreeType) {
+      errors.degreeType = "Degree type required"
+    }
+    if (!values.gradDate) {
+      errors.gradDate = "Graduation date required"
+    }
+    if (!values.location) {
+      errors.location = "Location required"
+    }
+    if (!values.major) {
+      errors.major = "Major required, if undeclared write Undeclared"
+    }
+    return errors
   }
 
   return (
@@ -93,7 +110,23 @@ export default function EducationDrawer({
       size="md"
     >
       <DrawerOverlay />
-      <DrawerContent>
+      <DrawerContent overflow={'scroll'}>
+      <Formik
+        initialValues={{
+          school: isEdit ? formData.school : "",
+          location: isEdit ? formData.location : "",
+          gradDate: isEdit ? formData.gradDate : "",
+          major: isEdit ? formData.major : "",
+          minor: isEdit ? formData.minor : "",
+          degreeType: isEdit ? formData.degreeType : "",
+          gpa: isEdit ? formData.gpa : "0.00"
+        }}
+        onSubmit={(values, { setSubmitting }) => {handleSubmit(values); setSubmitting(false)}}
+        onReset={clearData}
+        validate={validate}
+        >
+          {({ isSubmitting, handleSubmit, handleReset }) => (
+            <Form onSubmit={handleSubmit} onReset={handleReset}>
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth="1px">
           <Flex alignItems={"left"} justifyContent="left">
@@ -104,71 +137,101 @@ export default function EducationDrawer({
         <DrawerBody>
           <Stack spacing="6px">
             <Box>
+            <Field name='school'>
+                {({ field, form }: any) => (
+                <FormControl isInvalid={form.errors.school && form.submitCount > 0}>
               <FormLabel htmlFor="school">School</FormLabel>
               <Input
                 ref={school}
-                defaultValue={isEdit ? formData.school : ""}
+                {...field}
                 id="school"
                 placeholder="School Name"
               />
+              <FormErrorMessage>{form.errors.school}</FormErrorMessage>
+              </FormControl>)}
+              </Field>
             </Box>
             <Box>
-              <FormLabel htmlFor="location">Location</FormLabel>
+            <Field name='location'>
+                {({ field, form }: any) => (
+                  <FormControl isInvalid={form.errors.location && form.submitCount > 0}>
+                  <FormLabel htmlFor="location">Location</FormLabel>
               <Input
-                ref={location}
-                defaultValue={isEdit ? formData.location : ""}
+                {...field}
                 id="location"
                 placeholder="City, State"
               />
+              <FormErrorMessage>{form.errors.location}</FormErrorMessage>
+              </FormControl>)}
+              </Field>
             </Box>
             <Box>
+            <Field name='degreeType'>
+                {({ field, form }: any) => (
+                  <FormControl isInvalid={form.errors.degreeType && form.submitCount > 0}>
               <FormLabel htmlFor="degree-type">Degree Type</FormLabel>
               <Select
-                ref={degreeType}
-                defaultValue={isEdit ? formData.degreeType : ""}
+                {...field}
                 id="degree-type"
                 placeholder="Select Degree Type"
               >
                 <option value="B.A.">B.A.</option>
                 <option value="B.S.">B.S.</option>
               </Select>
+              <FormErrorMessage>{form.errors.degreeType}</FormErrorMessage>
+              </FormControl>)}
+              </Field>
             </Box>
             <Box>
+            <Field name='gradDate'>
+                {({ field, form }: any) => (
+                  <FormControl isInvalid={form.errors.gradDate && form.submitCount > 0}>
               <FormLabel htmlFor="grad-date">Graduation Date</FormLabel>
               <Input
-                ref={gradDate}
-                defaultValue={isEdit ? formData.gradDate : ""}
+                {...field}
                 id="grad-date"
                 placeholder="mm/dd/yyyy"
                 type="month"
               />
+              <FormErrorMessage>{form.errors.gradDate}</FormErrorMessage>
+              </FormControl>)}
+              </Field>
             </Box>
             <Box>
+            <Field name='major'>
+                {({ field, form }: any) => (
+                  <FormControl isInvalid={form.errors.major && form.submitCount > 0}>
               <FormLabel htmlFor="major">Major</FormLabel>
               <Input
-                ref={major}
-                defaultValue={isEdit ? formData.major : ""}
+                {...field}
                 id="major"
                 placeholder="Major"
               />
+            <FormErrorMessage>{form.errors.major}</FormErrorMessage>
+            </FormControl>)}
+            </Field>
             </Box>
             <Box>
+            <Field name='minor'>
+                {({ field, form }: any) => (
+                <FormControl>
               <FormLabel htmlFor="minor">Minor</FormLabel>
               <Input
-                ref={minor}
-                defaultValue={isEdit ? formData.minor : ""}
+                {...field}
                 id="minor"
                 placeholder="Minor"
               />
+              </FormControl>)}
+              </Field>
             </Box>
             <Box>
+            <Field name='gpa'>
+                {({ field, form }: any) => (
+                <FormControl>
               <FormLabel htmlFor="gpa">GPA</FormLabel>
               <NumberInput
-                value={gpa}
-                defaultValue={isEdit ? formData.gpa : ""}
-                onChange={(value) => {
-                  setGPA(value);
-                }}
+                value={field.value}
+                onChange={value => form.setFieldValue('gpa', value)}
                 precision={2}
                 step={0.1}
                 max={4.0}
@@ -180,20 +243,25 @@ export default function EducationDrawer({
                   <NumberDecrementStepper />
                 </NumberInputStepper>
               </NumberInput>
+              </FormControl>)}
+              </Field>
             </Box>
           </Stack>
         </DrawerBody>
 
         <DrawerFooter borderTopWidth="1px">
         <Flex justify={'space-between'} alignItems='left'>
-          <Button variant="outline" mr={3} onClick={clearData}>
+          <Button variant="outline" mr={3} type='reset'>
             Clear
           </Button>
-          <Button colorScheme="blue" onClick={handleSubmit}>
+          <Button colorScheme="blue" type='submit' isLoading={isSubmitting}>
             {isEdit ? "Edit" : "Submit"}
           </Button>
           </Flex>
         </DrawerFooter>
+        </Form>
+          )}
+        </Formik>
       </DrawerContent>
     </Drawer>
   );

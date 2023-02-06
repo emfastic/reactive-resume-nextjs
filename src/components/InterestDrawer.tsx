@@ -1,5 +1,5 @@
 import { updateExperience, updateKeyedObjectSection } from "@/server";
-import { DrawerProps } from "@/types/component";
+import { DrawerProps, Interest } from "@/types/component";
 import {
   Box,
   Button,
@@ -11,45 +11,67 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
-  Select,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
 import React from "react";
 import { useRef } from "react";
 
 export default function InterestDrawer({ isOpen, onClose, formData, isEdit, setEdit }: DrawerProps) {
   const interest = useRef<any>(null)
 
-  function clearData() {
-    interest.current.value = ''
+  const successToast = useToast()
+
+  function clearData(values: Interest) {
+    values.interest = ''
   }
 
-  function handleSubmit() {
+  function handleSubmit(values: Interest) {
     if (isEdit) {
-      updateExperience("interests", formData.key, {
-        interest: interest.current.value
-      });
+      updateExperience("interests", formData.key, values);
       closeDrawer()
+      successToast({
+        title: 'Successfully updated interest!',
+        status: 'success',
+        duration: 3000
+      })
     } else {
       updateKeyedObjectSection(
         [
-          {
-            interest: interest.current.value
-          },
+          values,
         ],
         "interests"
       );
-      clearData()
+      clearData(values)
+      successToast({
+        title: 'Successfully added interest!',
+        status: 'success',
+        duration: 3000
+      })
     }
   }
 
   function closeDrawer() {
-    clearData()
     setEdit(false)
     onClose()
   }
+
+  const validate = (values: any) => {
+
+    const errors: any = {}
+
+    if (!values.interest) {
+      errors.interest = 'Interest required'
+    }
+
+    return errors
+  }
+
   return (
     <Drawer
       isOpen={isOpen}
@@ -60,31 +82,50 @@ export default function InterestDrawer({ isOpen, onClose, formData, isEdit, setE
     >
       <DrawerOverlay />
       <DrawerContent>
+      <Formik
+        onSubmit={handleSubmit}
+        onReset={clearData}
+        initialValues={{
+          interest: isEdit ? formData.interest : ""
+        }}
+        validate={validate}
+        >
+          {({ isSubmitting, handleSubmit, handleReset }) => (
+            <Form onSubmit={handleSubmit} onReset={handleReset}>
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth="1px">Add Interest</DrawerHeader>
 
         <DrawerBody>
           <Stack spacing="24px">
             <Box>
-              <FormLabel htmlFor="skill">Interest</FormLabel>
+              <Field name='interest'>
+              {({ field, form }: any) => (
+            <FormControl isInvalid={form.errors.interest && form.submitCount > 0}>
+              <FormLabel htmlFor="interest">Interest</FormLabel>
               <Input
                 ref={interest}
-                defaultValue={isEdit ? formData.interest : ""}
+                {...field}
                 id="interest"
                 placeholder="Your interest here"
               />
+              <FormErrorMessage>{form.errors.interest}</FormErrorMessage>
+              </FormControl>)}
+              </Field>
             </Box>
           </Stack>
         </DrawerBody>
 
         <DrawerFooter borderTopWidth="1px">
         <Flex justify={'space-between'} alignItems='left'>
-          <Button variant="outline" mr={3} onClick={clearData}>
+          <Button variant="outline" mr={3} type='reset'>
             Clear
           </Button>
-          <Button colorScheme="blue" onClick={handleSubmit}>{isEdit ? "Edit" : "Submit"}</Button>
+          <Button colorScheme="blue" type='submit' isLoading={isSubmitting}>{isEdit ? "Edit" : "Submit"}</Button>
           </Flex>
         </DrawerFooter>
+        </Form>
+          )}
+        </Formik>
       </DrawerContent>
     </Drawer>
   );
