@@ -129,7 +129,7 @@ export default function ExperienceDrawer({
       return response.json()
     })
     .then((answer) => {
-      form.setFieldValue('description', answer.choices[0].text);
+      form.setFieldValue('description', answer.choices[0].text.trim());
       setAPILoading(false);
     })
   };
