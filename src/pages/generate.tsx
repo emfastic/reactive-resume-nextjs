@@ -201,6 +201,9 @@ export default function Generate() {
     <>
     <Head>
       <title>Reactive Resume</title>
+      <meta name="keywords" content="resume, student, job search, career, easy resume builder"/>
+      <meta name="robots" content="index, follow"/>
+      <meta name="author" content="Jake Ottiger"/>
     </Head>
       <Flex
         alignItems={"left"}
