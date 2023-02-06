@@ -111,7 +111,7 @@ export default function ExperienceDrawer({
     e.preventDefault();
     setAPILoading(true);
 
-    const prompt = `Write 3 resume professional "\\u2022" points for a ${form.values.title} at ${form.values.organization}. If relevant to the position one should be quanitifiable.`
+    const prompt = `Write 3 resume professional "\u2022" points for a ${form.values.title} at ${form.values.organization}. If relevant to the position one should be quanitifiable, do not label it as quanitifiable.`
   
     fetch("/api/generate", {
       method: "POST",
@@ -331,11 +331,11 @@ export default function ExperienceDrawer({
           <Button variant="outline" mr={3} type='reset'>
             Clear
           </Button>
-          {/* <Field name='apiButton'>
+          <Field name='apiButton'>
                 {({ field, form }: any) => (
           <Button colorScheme="green" type='button' isDisabled={!form.values.organization || !form.values.title} onClick={(event) => generateBullets(event, form)} isLoading={apiLoading}>Write for Me</Button>
           )}
-              </Field> */}
+              </Field>
           <Button colorScheme="blue" type='submit' isLoading={isSubmitting}>{isEdit ? "Edit" : "Submit"}</Button>
         </DrawerFooter>
         </Form>
