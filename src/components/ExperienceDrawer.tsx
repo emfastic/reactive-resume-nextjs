@@ -19,6 +19,7 @@ import {
   useToast,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { ExperienceDrawerProps } from "@/types/component";
 import { updateExperience, updateKeyedObjectSection } from "@/server";
@@ -293,13 +294,14 @@ export default function ExperienceDrawer({
             <Field name='endDate'>
                 {({ field, form }: any) => (
                 <FormControl>
-              <FormLabel htmlFor="end-date">End Date (blank if current role)</FormLabel>
+              <FormLabel htmlFor="end-date">End Date</FormLabel>
               <Input
                 {...field}
                 id="end-date"
                 placeholder="mm/dd/yyyy"
                 type="month"
               />
+              <FormHelperText>Leave blank if you still work here.</FormHelperText>
               </FormControl>)}
               </Field>
             </Box>

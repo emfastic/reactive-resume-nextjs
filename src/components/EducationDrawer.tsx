@@ -22,7 +22,8 @@ import {
   NumberInput,
   FormControl,
   FormErrorMessage,
-  useToast
+  useToast,
+  FormHelperText
 } from "@chakra-ui/react";
 import { updateExperience, updateKeyedObjectSection } from "@/server";
 import { Field, Form, Formik } from "formik";
@@ -207,6 +208,7 @@ export default function EducationDrawer({
                 id="major"
                 placeholder="Major"
               />
+            <FormHelperText>Put undeclared if you are undecided.</FormHelperText>
             <FormErrorMessage>{form.errors.major}</FormErrorMessage>
             </FormControl>)}
             </Field>
@@ -243,6 +245,7 @@ export default function EducationDrawer({
                   <NumberDecrementStepper />
                 </NumberInputStepper>
               </NumberInput>
+              <FormHelperText>Leave as 0.00 if you don't want to share.</FormHelperText>
               </FormControl>)}
               </Field>
             </Box>

@@ -36,6 +36,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { DocumentCreator } from '../server/resume'
 import { Packer } from "docx";
 import { saveAs } from 'file-saver'
+import Head from 'next/head'
 
 export default function Generate() {
   const router = useRouter();
@@ -198,6 +199,9 @@ export default function Generate() {
 
   return (
     <>
+    <Head>
+      <title>Reactive Resume</title>
+    </Head>
       <Flex
         alignItems={"left"}
         justifyContent="space-between"

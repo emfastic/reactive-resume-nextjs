@@ -190,7 +190,7 @@ export class DocumentCreator {
         new TextRun({
           text: `${degreeType} in ${major}${
             minor ? ", Minor in " + minor : ""
-          } ${gpa ? "| " + gpa + "/4.00" : ""}`,
+          } ${gpa !== '0.00' ? "| " + gpa + "/4.00" : ""}`,
           italics: true,
           font: {
             name: fontType,
