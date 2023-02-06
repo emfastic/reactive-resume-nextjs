@@ -124,7 +124,15 @@ export default function ExperienceDrawer({
     })
     .then(response => {
       if (!response.ok) {
+        setAPILoading(false);
+        successToast({
+          title: "Took to long to write the bullets try again!",
+          status: "error",
+          duration: 3000
+        })
         throw new Error(response.statusText);
+        
+
       }
       return response.json()
     })
