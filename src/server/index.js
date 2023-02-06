@@ -14,12 +14,12 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBvSSmSRY1YXynd-gjdfBC-fi-nqzn5GKo",
-  authDomain: "reactive-resume-bde21.firebaseapp.com",
-  projectId: "reactive-resume-bde21",
-  storageBucket: "reactive-resume-bde21.appspot.com",
-  messagingSenderId: "784369660175",
-  appId: "1:784369660175:web:c42eca650d6f39b20e4e7a",
+  apiKey: "AIzaSyCGbmlQWTQpUq8wd81-pmXhObFPPXxQpls",
+  authDomain: "reactive-resume-next.firebaseapp.com",
+  projectId: "reactive-resume-next",
+  storageBucket: "reactive-resume-next.appspot.com",
+  messagingSenderId: "290858760980",
+  appId: "1:290858760980:web:e95a4ebd0170ad7e026001"
 };
 
 // Initialize Firebase
