@@ -94,7 +94,7 @@ export default function SkillDrawer({
       <DrawerOverlay />
       <DrawerContent>
         <Formik
-        onSubmit={handleSubmit}
+        onSubmit={(values, { setSubmitting }) => {handleSubmit(values); setSubmitting(false)}}
         onReset={clearData}
         initialValues={{
           skillType: isEdit ? formData.skillType : "",

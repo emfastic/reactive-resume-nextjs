@@ -329,11 +329,11 @@ export default function ExperienceDrawer({
           <Button variant="outline" mr={3} type='reset'>
             Clear
           </Button>
-          <Field name='apiButton'>
+          {/* <Field name='apiButton'>
                 {({ field, form }: any) => (
           <Button colorScheme="green" type='button' isDisabled={!form.values.organization || !form.values.title} onClick={(event) => generateBullets(event, form)} isLoading={apiLoading}>Write for Me</Button>
           )}
-              </Field>
+              </Field> */}
           <Button colorScheme="blue" type='submit' isLoading={isSubmitting}>{isEdit ? "Edit" : "Submit"}</Button>
         </DrawerFooter>
         </Form>

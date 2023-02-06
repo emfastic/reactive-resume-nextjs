@@ -83,7 +83,7 @@ export default function InterestDrawer({ isOpen, onClose, formData, isEdit, setE
       <DrawerOverlay />
       <DrawerContent>
       <Formik
-        onSubmit={handleSubmit}
+        onSubmit={(values, { setSubmitting }) => {handleSubmit(values); setSubmitting(false)}}
         onReset={clearData}
         initialValues={{
           interest: isEdit ? formData.interest : ""
