@@ -8,6 +8,16 @@ export default function WorkExperienceResumeSection({ workExperienceObject }: an
     const workExperienceList: WorkExperience[] = []
     const extracurricularExperienceList: WorkExperience[] = []
 
+    function compareDates(a: WorkExperience, b: WorkExperience) {
+        if (a.endDate < b.endDate) {
+          return 1;
+        }
+        if (a.endDate > b.endDate) {
+          return -1;
+        }
+        return 0;
+      }
+
     function formatDate(date: string): string {
     const months: {[key: string]: string} = {
       "01": "January",
@@ -31,19 +41,23 @@ export default function WorkExperienceResumeSection({ workExperienceObject }: an
 
     // Seperate experience object into resume sections
     Object.keys(workExperienceObject).forEach(key => {
-        if (workExperienceObject[key]['section'] === 'Work') {
+        if (workExperienceObject[key]['experienceType'] === 'work') {
             workExperienceList.push(workExperienceObject[key])
-        } else if (workExperienceObject[key]['section'] === 'Research') {
+        } else if (workExperienceObject[key]['experienceType'] === 'research') {
             researchExperienceList.push(workExperienceObject[key])
-        } else if (workExperienceObject[key]['section'] === 'Extracurricular') {
+        } else if (workExperienceObject[key]['experienceType'] === 'extracurricular') {
             extracurricularExperienceList.push(workExperienceObject[key])
         }
     })
 
+    workExperienceList.sort(compareDates)
+    researchExperienceList.sort(compareDates)
+    extracurricularExperienceList.sort(compareDates)
+
     const workExperienceItems = workExperienceList.map((workObject: WorkExperience) => {
 
         // CSVed description
-        const descriptionList = workObject.description.split(',')
+        const descriptionList = workObject.description.split(',,')
 
         const descriptionItems = descriptionList.map((value, idx) => {
             return <ListItem key={idx}>{value}</ListItem>
@@ -67,7 +81,7 @@ export default function WorkExperienceResumeSection({ workExperienceObject }: an
                 {formatDate(workObject.startDate)} - {formatDate(workObject.endDate)}
             </Box>
             </Flex>
-            <UnorderedList>
+            <UnorderedList mt='3' mb='3'>
                 {descriptionItems}
             </UnorderedList>
             </Box>
@@ -77,7 +91,7 @@ export default function WorkExperienceResumeSection({ workExperienceObject }: an
     const researchExperienceItems = researchExperienceList.map((workObject: WorkExperience) => {
 
         // CSVed description
-        const descriptionList = workObject.description.split(',')
+        const descriptionList = workObject.description.split(',,')
 
         const descriptionItems = descriptionList.map((value, idx) => {
             return <ListItem key={idx}>{value}</ListItem>
@@ -101,7 +115,7 @@ export default function WorkExperienceResumeSection({ workExperienceObject }: an
                 {formatDate(workObject.startDate)} - {formatDate(workObject.endDate)}
             </Box>
             </Flex>
-            <UnorderedList>
+            <UnorderedList mt='3' mb='3'>
                 {descriptionItems}
             </UnorderedList>
             </Box>
@@ -111,7 +125,7 @@ export default function WorkExperienceResumeSection({ workExperienceObject }: an
     const extracurricularExperienceItems = extracurricularExperienceList.map((workObject: WorkExperience) => {
 
         // CSVed description
-        const descriptionList = workObject.description.split(',')
+        const descriptionList = workObject.description.split(',,')
 
         const descriptionItems = descriptionList.map((value, idx) => {
             return <ListItem key={idx}>{value}</ListItem>
@@ -135,7 +149,7 @@ export default function WorkExperienceResumeSection({ workExperienceObject }: an
                 {formatDate(workObject.startDate)} - {formatDate(workObject.endDate)}
             </Box>
             </Flex>
-            <UnorderedList>
+            <UnorderedList mt='3' mb='3'>
                 {descriptionItems}
             </UnorderedList>
             </Box>

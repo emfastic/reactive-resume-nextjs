@@ -51,7 +51,7 @@ export default function WorkExperienceChip({ entry, setExperienceObject, experie
             cursor={"pointer"}
             onClick={handleClick}
           >
-            <Badge variant="subtle" fontSize="sm" mr="2">
+            <Badge variant="subtle" colorScheme={clicked ? 'blue' : 'gray'} fontSize="sm" mr="2">
               {entry.experienceType}
             </Badge>
             <TagLabel>

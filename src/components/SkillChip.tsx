@@ -29,7 +29,7 @@ export default function SkillChip({ entry, setSkillObject, skillObject }: any) {
           cursor={"pointer"}
           onClick={handleClick}
         >
-          <Badge variant="subtle" fontSize="sm" mr="2">
+          <Badge variant="subtle" fontSize="sm" mr="2" colorScheme={clicked ? 'red' : 'gray'}>
             {entry.skillType}
           </Badge>
           <TagLabel>{entry.skill}</TagLabel>

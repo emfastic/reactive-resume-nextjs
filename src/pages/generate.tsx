@@ -295,7 +295,7 @@ export default function Generate() {
                 {user && user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : ''}
               </Heading>
               <Heading size="md" fontWeight="normal">
-                {user && user.email && user.phoneNumber && user.website ? `${user.email} | ${formatPhoneNum(user.phoneNumber)} | ${user.website}` : ""}
+                {user && user.email && user.phoneNumber ? `${user.email} | ${formatPhoneNum(user.phoneNumber)}${user.website ? ` | ${user.website}` : ''}` : ""}
               </Heading>
             </CardHeader>
 

@@ -68,19 +68,13 @@ function handleSignIn() {
 }
 
 /* Update the user's profile to contain a first name, last name, phone number, alt email, and website to be used on resume */
-function updateProfile(firstName, lastName, phoneNumber, email, website) {
+function updateProfile(profile) {
   // Get current user
   const user = auth.currentUser;
 
   // If a user is logged in update the profile, else log no user
   if (user) {
-    update(ref(db, `users/${user.uid}`), {
-      firstName: firstName,
-      lastName: lastName,
-      phoneNumber: phoneNumber,
-      email: email,
-      website: website,
-    });
+    update(ref(db, `users/${user.uid}`), profile);
   } else {
     console.log("no current user");
   }

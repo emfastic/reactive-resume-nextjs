@@ -1,7 +1,18 @@
 import { Box, Flex, Heading, Divider } from '@chakra-ui/react'
+import { EducationExperience } from "@/types/component"
 import React from 'react'
 
 function EducationResumeSection({ educationObject }: any) {
+
+  function compareDates(a: EducationExperience, b: EducationExperience) {
+    if (a.gradDate < b.gradDate) {
+      return 1;
+    }
+    if (a.gradDate > b.gradDate) {
+      return -1;
+    }
+    return 0;
+  }
 
     function formatDate(date: string): string {
         const months: {[key: string]: string} = {
@@ -24,26 +35,34 @@ function EducationResumeSection({ educationObject }: any) {
           : months[date.slice(5)] + " " + date.slice(0, 4);
       }
 
-    const educationItems = Object.keys(educationObject).map((key: string) => {
+    let educationList: EducationExperience[] = []
+
+    Object.keys(educationObject).forEach((key) => {
+      educationList.push(educationObject[key])
+    })
+
+    educationList.sort(compareDates)
+
+    const educationItems = educationList.map((educationObject: EducationExperience) => {
         return (
-            <Box key={key} mb='2'>
+            <Box key={educationObject.key} mb='2'>
             <Flex justify='space-between' fontWeight={'semibold'}>
                 <Box>
-                    {educationObject[key].school}
+                    {educationObject.school}
                 </Box>
                 <Box>
-                    {educationObject[key].location}
+                    {educationObject.location}
                 </Box>
             </Flex>
             <Flex justify='space-between'>
                 <Box>
-            {educationObject[key].degreeType} in {educationObject[key].major}{educationObject[key].minor ? `, Minor in ${educationObject[key].minor}` : ''}
+            {educationObject.degreeType} in {educationObject.major}{educationObject.minor ? `, Minor in ${educationObject.minor}` : ''}
             </Box>
             <Box>
-                {formatDate(educationObject[key].gradDate)}
+                {formatDate(educationObject.gradDate)}
             </Box>
             </Flex>
-            <Box>{educationObject[key].gpa !== '0.00' ? `GPA: ${educationObject[key].gpa}/4.00` : ''}</Box>
+            <Box>{educationObject.gpa !== '0.00' ? `GPA: ${educationObject.gpa}/4.00` : ''}</Box>
             </Box>
         )
     })

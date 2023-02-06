@@ -105,7 +105,7 @@ export default function Profile() {
       if (user) {
         onValue(child(dbRef, `users/${user.uid}`), (snapshot) => {
           if (typeof window !== "undefined") {
-            if (snapshot.exists()) {
+            if (snapshot.exists() && snapshot.val().firstName) {
               setUser(snapshot.val());
             } else {
               setUser(snapshot.val());
@@ -248,7 +248,7 @@ export default function Profile() {
             colorScheme="blue"
             cursor={"pointer"}
           >
-            <Badge variant="subtle" colorScheme="cyan" fontSize="sm" mr="2">
+            <Badge variant="subtle" colorScheme="blue" fontSize="sm" mr="2">
               {entry.experienceType}
             </Badge>
             <TagLabel onClick={() => {
@@ -274,7 +274,7 @@ export default function Profile() {
           colorScheme="red"
           cursor={"pointer"}
         >
-          <Badge variant="subtle" colorScheme="cyan" fontSize="sm" mr="2">
+          <Badge variant="subtle" colorScheme="red" fontSize="sm" mr="2">
             {entry.skillType}
           </Badge>
           <TagLabel onClick={() => {
@@ -346,11 +346,11 @@ export default function Profile() {
           }}
         />
 
-        <ProfileModal
+        {user ? <ProfileModal
           isModalOpen={isModalOpen}
           onModalClose={onModalClose}
           user={user}
-        />
+        /> : <></>}
 
         <Button onClick={() => router.push("/generate")}>Create Resume</Button>
       </Flex>
@@ -437,7 +437,7 @@ export default function Profile() {
           formData={interestFormData}
         />
 
-        <Box w="100%" h="100%" pl="200" pr="350" pt="5" pb="5">
+        <Box w="100%" h="100%" pl="200" pr="250" pt="5" pb="5">
           <Accordion defaultIndex={[0, 1]} allowMultiple>
             <AccordionItem>
               <h2>

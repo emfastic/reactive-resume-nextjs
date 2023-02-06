@@ -9,9 +9,9 @@ export default function SkillsInterestsResumeSection({ skillObject, interestObje
     const interestList: Interest[] = []
 
     Object.keys(skillObject).forEach(key => {
-        if (skillObject[key]['tag'] === 'Technical Skill') {
+        if (skillObject[key]['skillType'] === 'technical') {
             technicalSkillList.push(skillObject[key]['skill'])
-        } else if (skillObject[key]['tag'] === 'Language') {
+        } else if (skillObject[key]['skillType'] === 'language') {
             languageSkillList.push(skillObject[key]['skill'])
         }
     })
@@ -54,7 +54,7 @@ export default function SkillsInterestsResumeSection({ skillObject, interestObje
                     {headingTitle}
                   </Heading>
                   <Divider /></>) : (<></>)}
-                  <Flex>{technicalSkillText !== '' ? <Box fontWeight={'semibold'}>Techincal:&nbsp;</Box> : <></>}{technicalSkillText}</Flex>
+                  <Flex>{technicalSkillText !== '' ? <Box fontWeight={'semibold'}>Technical:&nbsp;</Box> : <></>}{technicalSkillText}</Flex>
                   <Flex>{languageSkillText !== '' ? <Box fontWeight={'semibold'}>Language:&nbsp;</Box> : <></>}{languageSkillText}</Flex>
                   <Flex>{interestText !== '' ? <Box fontWeight={'semibold'}>Interests:&nbsp;</Box> : <></>}{interestText}</Flex>
                 </Box>

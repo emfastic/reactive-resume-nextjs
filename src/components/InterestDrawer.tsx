@@ -115,13 +115,11 @@ export default function InterestDrawer({ isOpen, onClose, formData, isEdit, setE
           </Stack>
         </DrawerBody>
 
-        <DrawerFooter borderTopWidth="1px">
-        <Flex justify={'space-between'} alignItems='left'>
+        <DrawerFooter borderTopWidth="1px" justifyContent={'space-between'} alignItems='left'>
           <Button variant="outline" mr={3} type='reset'>
             Clear
           </Button>
           <Button colorScheme="blue" type='submit' isLoading={isSubmitting}>{isEdit ? "Edit" : "Submit"}</Button>
-          </Flex>
         </DrawerFooter>
         </Form>
           )}

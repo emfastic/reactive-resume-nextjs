@@ -119,7 +119,7 @@ export default function SkillDrawer({
                 ref={skillType}
                 {...field}
               >
-                <option value="techincal">Technical</option>
+                <option value="technical">Technical</option>
                 <option value="language">Language</option>
               </Select>
               <FormErrorMessage>{form.errors.skillType}</FormErrorMessage>
@@ -143,13 +143,11 @@ export default function SkillDrawer({
           </Stack>
         </DrawerBody>
 
-        <DrawerFooter borderTopWidth="1px">
-        <Flex justify={'space-between'} alignItems='left'>
+        <DrawerFooter borderTopWidth="1px" justifyContent={'space-between'} alignItems='left'>
           <Button variant="outline" mr={3} type='reset'>
             Clear
           </Button>
           <Button colorScheme="blue" type='submit' isLoading={isSubmitting}>{isEdit ? "Edit" : "Submit"}</Button>
-          </Flex>
         </DrawerFooter>
         </Form>
           )}
