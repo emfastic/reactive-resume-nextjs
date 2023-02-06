@@ -245,7 +245,7 @@ export default function EducationDrawer({
                   <NumberDecrementStepper />
                 </NumberInputStepper>
               </NumberInput>
-              <FormHelperText>Leave as 0.00 if you don't want to share.</FormHelperText>
+              <FormHelperText>Leave as 0.00 if you do not want to share.</FormHelperText>
               </FormControl>)}
               </Field>
             </Box>
