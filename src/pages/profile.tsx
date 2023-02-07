@@ -374,6 +374,7 @@ export default function Profile() {
                 onClick={onEducationDrawerOpen}
                 w="100%"
                 size="lg"
+                justifyContent='left'
               >
                 Add Education
               </Button>
@@ -385,6 +386,7 @@ export default function Profile() {
                 onClick={onExperienceDrawerOpen}
                 w="100%"
                 size="lg"
+                justifyContent='left'
               >
                 Add Experience
               </Button>
@@ -396,6 +398,7 @@ export default function Profile() {
                 onClick={onSkillDrawerOpen}
                 w="100%"
                 size="lg"
+                justifyContent='left'
               >
                 Add Skill
               </Button>
@@ -407,6 +410,7 @@ export default function Profile() {
                 onClick={onInterestDrawerOpen}
                 w="100%"
                 size="lg"
+                justifyContent='left'
               >
                 Add Interest
               </Button>
