@@ -62,8 +62,8 @@ export default function Home() {
     <Head>
       <title>Reactive Resume</title>
         <meta name="description" content="An easy to use platform to help students create professional resumes quickly and efficiently. Get started today."/>
-        <meta property="og:title" content="Easy Resume Builder for Students"/>
-        <meta property="og:description" content="Create a professional resume in minutes with our easy to use platform for students. Start your job search today."/>
+        <meta property="og:title" content="Reactive Resume"/>
+        <meta property="og:description" content="An easy to use platform to help students create professional resumes quickly and efficiently. Get started today."/>
         <meta property="og:url" content="https://reactive-resume-nextjs.vercel.app/"/>
         <meta property="og:image" content="/website-ss.png"/>
         <meta property="og:type" content="website" />
