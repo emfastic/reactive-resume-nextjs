@@ -23,11 +23,13 @@ import {
   FormControl,
   FormErrorMessage,
   useToast,
-  FormHelperText
+  FormHelperText,
+  InputGroup
 } from "@chakra-ui/react";
 import { updateExperience, updateKeyedObjectSection } from "@/server";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, validateYupSchema } from "formik";
 import { EducationExperience } from '@/types/component.js';
+import DatePicker from "./DatePicker";
 
 export default function EducationDrawer({
   formData,
@@ -40,6 +42,8 @@ export default function EducationDrawer({
 
   const successToast = useToast()
 
+  const [startDate, setStartDate] = React.useState<any>(new Date());
+
   function clearData(values: EducationExperience) {
     values.school = "";
     values.location = "";
@@ -48,7 +52,6 @@ export default function EducationDrawer({
     values.major = "";
     values.minor = "";
     values.gpa = "0.00";
-    // setGPA("0.00");
   }
 
   function handleSubmit(values: EducationExperience) {
@@ -102,6 +105,12 @@ export default function EducationDrawer({
     return errors
   }
 
+  const [selectedDate, setSelectedDate] = useState<string>('')
+
+  const handleDateChange = (numericDate: string) => {
+    setSelectedDate(numericDate)
+  };
+
   return (
     <Drawer
       isOpen={isOpen}
@@ -126,7 +135,7 @@ export default function EducationDrawer({
         onReset={clearData}
         validate={validate}
         >
-          {({ isSubmitting, handleSubmit, handleReset }) => (
+          {({ isSubmitting, handleSubmit, handleReset, values }) => (
             <Form onSubmit={handleSubmit} onReset={handleReset}>
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth="1px">
@@ -188,12 +197,7 @@ export default function EducationDrawer({
                 {({ field, form }: any) => (
                   <FormControl isInvalid={form.errors.gradDate && form.submitCount > 0}>
               <FormLabel htmlFor="grad-date">Graduation Date</FormLabel>
-              <Input
-                {...field}
-                id="grad-date"
-                placeholder="mm/dd/yyyy"
-                type="month"
-              />
+          <DatePicker value={values.gradDate} dateField='gradDate' form={form}/>
               <FormErrorMessage>{form.errors.gradDate}</FormErrorMessage>
               </FormControl>)}
               </Field>

@@ -25,8 +25,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         n: 1,
     };
 
-    console.log('here', payload)
-
     fetch("https://api.openai.com/v1/completions", {
         headers: {
             "Content-Type": "application/json",
@@ -37,7 +35,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     })
         .then((response) => response.json())
         .then((json) => {
-            console.log(json)
             res.status(200).json(json);
         });
 }

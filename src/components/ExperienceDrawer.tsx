@@ -25,6 +25,7 @@ import { ExperienceDrawerProps } from "@/types/component";
 import { updateExperience, updateKeyedObjectSection } from "@/server";
 import { Field, Form, Formik } from "formik";
 import { WorkExperience } from '@/types/component.js';
+import DatePicker from "./DatePicker";
 
 export default function ExperienceDrawer({
   isOpen,
@@ -213,7 +214,7 @@ export default function ExperienceDrawer({
         validate={validate}
 
         >
-          {({ isSubmitting, handleSubmit, handleReset }) => (
+          {({ isSubmitting, handleSubmit, handleReset, values }) => (
             <Form onSubmit={handleSubmit} onReset={handleReset}>
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth="1px">
@@ -288,12 +289,7 @@ export default function ExperienceDrawer({
                 {({ field, form }: any) => (
                 <FormControl isInvalid={form.errors.startDate && form.submitCount > 0}>
               <FormLabel htmlFor="start-date">Start Date</FormLabel>
-              <Input
-                {...field}
-                id="start-date"
-                placeholder="mm/dd/yyyy"
-                type="month"
-              />
+              <DatePicker value={values.startDate} dateField='startDate' form={form}/>
               <FormErrorMessage>{form.errors.startDate}</FormErrorMessage>
               </FormControl>)}
               </Field>
@@ -303,12 +299,7 @@ export default function ExperienceDrawer({
                 {({ field, form }: any) => (
                 <FormControl>
               <FormLabel htmlFor="end-date">End Date</FormLabel>
-              <Input
-                {...field}
-                id="end-date"
-                placeholder="mm/dd/yyyy"
-                type="month"
-              />
+              <DatePicker value={values.endDate} dateField='endDate' form={form}/>
               <FormHelperText>Leave blank if you still work here.</FormHelperText>
               </FormControl>)}
               </Field>
@@ -316,8 +307,6 @@ export default function ExperienceDrawer({
             <Box>
             <Field name='description'>
                 {({ field, form }: any) => (
-                  
-                  
                 <FormControl  isInvalid={form.errors.description && form.submitCount > 0}>
               <FormLabel htmlFor="description">Description</FormLabel>
               <Textarea
