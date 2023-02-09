@@ -6,6 +6,7 @@ import {
   Heading,
   Divider,
   Image,
+  Flex,
 } from "@chakra-ui/react";
 import { ResumeCardProps } from "@/types/component";
 
@@ -16,7 +17,7 @@ export default function ResumeCard({
 }: ResumeCardProps) {
   return (
     <>
-      <Card>
+      <Card w="sm">
         <CardBody>
           <CardHeader>
             <Heading size="md" fontFamily={"arial"} fontWeight="bolder">
@@ -24,7 +25,9 @@ export default function ResumeCard({
             </Heading>
           </CardHeader>
           <Divider />
-          <Image src={img} alt={imgName} borderRadius={"lg"} w="65" h="450" />
+          <Flex justify={{ base: "center" }}>
+            <Image src={img} alt={imgName} borderRadius={"lg"} w="65" h="450" />
+          </Flex>
         </CardBody>
       </Card>
     </>

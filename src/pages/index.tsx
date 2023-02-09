@@ -23,18 +23,18 @@ import { auth, provider, writeUserData, dbRef } from "../server/index.js";
 import { onValue, child } from "firebase/database";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
-import Head from 'next/head'
+import Head from "next/head";
 
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, setUser] = useState();
   const router = useRouter();
 
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, (user) => {
     if (user) {
-      router.push('/profile')
-    }}
-  )
+      router.push("/profile");
+    }
+  });
 
   function handleSignIn() {
     signInWithPopup(auth, provider).then((result) => {
@@ -59,78 +59,104 @@ export default function Home() {
 
   return (
     <>
-    <Head>
-      <title>Reactive Resume</title>
-        <meta name="description" content="An easy to use platform to help students create professional resumes quickly and efficiently. Get started today."/>
-        <meta property="og:title" content="Reactive Resume"/>
-        <meta property="og:description" content="An easy to use platform to help students create professional resumes quickly and efficiently. Get started today."/>
-        <meta property="og:url" content="https://reactive-resume-nextjs.vercel.app/"/>
-        <meta property="og:image" content="/website-ss.png"/>
+      <Head>
+        <title>Reactive Resume</title>
+        <meta
+          name="description"
+          content="An easy to use platform to help students create professional resumes quickly and efficiently. Get started today."
+        />
+        <meta property="og:title" content="Reactive Resume" />
+        <meta
+          property="og:description"
+          content="An easy to use platform to help students create professional resumes quickly and efficiently. Get started today."
+        />
+        <meta
+          property="og:url"
+          content="https://reactive-resume-nextjs.vercel.app/"
+        />
+        <meta property="og:image" content="/website-ss.png" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@jakeottiger" />
         <meta name="twitter:title" content="Reactive Resume" />
-        <meta name="twitter:description" content="Show your value with a professional resume" />
+        <meta
+          name="twitter:description"
+          content="Show your value with a professional resume"
+        />
         <meta name="twitter:image" content="/website-ss.png" />
-        <meta name="keywords" content="resume, student, job search, career, easy resume builder"/>
-        <meta name="robots" content="index, follow"/>
-        <meta name="author" content="Jake Ottiger"/>
-    </Head>
+        <meta
+          name="keywords"
+          content="resume, student, job search, career, easy resume builder"
+        />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Jake Ottiger" />
+      </Head>
+
       <Flex
-        alignItems={"right"}
+        alignItems={"center"}
         justifyContent="space-between"
         paddingTop={"3"}
-        paddingRight={"5"}
         paddingBottom={"3"}
+        minH="10vh"
+        minW="100%"
+        bg="white"
       >
-        <Heading size='xl' ml='5'>Reactive Resume</Heading>
-        <HStack as="nav" spacing={6}>
-          <LoginModal
-            text="Get Started"
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            handleSignIn={handleSignIn}
-          />
-        </HStack>
+        <Heading size={{ base: "lg", sm: "lg", md: "xl", lg: "xl" }} ml="5">
+          Reactive Resume
+        </Heading>
+        <LoginModal
+          text="Get Started"
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          handleSignIn={handleSignIn}
+        />
       </Flex>
-      <Divider />
-      <Flex alignItems={"center"} justifyContent="center" paddingTop={"3"}>
+      <Divider bg="white" />
+      <Box minH="90vh" bg={`linear-gradient(to top, #E0F2F1, #FFFF)`}>
         <Flex
-          direction="column"
-          h="sm"
-          w="2xl"
-          justifyContent={"center"}
-          alignItems="center"
+          display={{ base: "box", md: "flex", lg: "flex" }}
+          alignItems={"center"}
+          justifyContent="center"
+          paddingTop={"3"}
         >
-          <Heading
-            size="4xl"
-            fontFamily="arial"
-            fontWeight="semibold"
-            paddingLeft={"4"}
+          <Flex
+            direction="column"
+            h="100%"
+            w="100%"
+            justifyContent={"center"}
+            alignItems="center"
           >
-            Show your value.
-          </Heading>
+            <Heading
+              size={{ base: "xl", sm: "2xl", md: "3xl", lg: "4xl" }}
+              fontFamily="arial"
+              fontWeight="semibold"
+              ml="4"
+            >
+              Show your value.
+            </Heading>
+          </Flex>
+          <Stack
+            direction={{ base: "column", md: "row", lg: "row", xl: "row" }}
+            mt="5"
+            mr={{ base: "0", md: "5", lg: "5", xl: "5" }}
+            spacing={6}
+            alignItems={{ base: "center" }}
+            textAlign={{ base: "center" }}
+          >
+            <ResumeCard
+              img="/business-resume.png"
+              imgName="Business Resume"
+              headerName="Business Resume"
+            ></ResumeCard>
+            <ResumeCard
+              img="/communication-resume.png"
+              imgName="Communication Resume"
+              headerName="Communication Resume"
+            ></ResumeCard>
+          </Stack>
         </Flex>
-        <HStack
-          spacing={8}
-          mt="5"
-          alignContent={"right"}
-          justifyContent="right"
-          paddingRight={"5"}
-        >
-          <ResumeCard
-            img="/business-resume.png"
-            imgName="Business Resume"
-            headerName="Business Resume"
-          ></ResumeCard>
-          <ResumeCard
-            img="/communication-resume.png"
-            imgName="Communication Resume"
-            headerName="Communication Resume"
-          ></ResumeCard>
-        </HStack>
-      </Flex>
+      </Box>
     </>
   );
 }

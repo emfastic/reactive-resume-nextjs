@@ -1,11 +1,4 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  VStack,
-  Badge,
-} from "@chakra-ui/layout";
+import { Box, Divider, Flex, Heading, VStack, Badge } from "@chakra-ui/layout";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect } from "react";
 import { Button, IconButton } from "@chakra-ui/button";
@@ -19,31 +12,38 @@ import {
   CardBody,
   CardHeader,
   Stack,
-  useToast
+  useToast,
+  Show,
 } from "@chakra-ui/react";
 import { auth, dbRef } from "../server/index.js";
-import { onValue, child } from "firebase/database"
+import { onValue, child } from "firebase/database";
 import { useRouter } from "next/router";
-import { EducationExperience, Interest, Skill, User, WorkExperience } from "@/types/component.js";
+import {
+  EducationExperience,
+  Interest,
+  Skill,
+  User,
+  WorkExperience,
+} from "@/types/component.js";
 import EducationChip from "../components/EducationChip";
-import InterestChip from '../components/InterestChip';
+import InterestChip from "../components/InterestChip";
 import WorkExperienceChip from "../components/WorkExperienceChip";
 import SkillChip from "../components/SkillChip";
-import EducationResumeSection from '../components/EducationResumeSection';
+import EducationResumeSection from "../components/EducationResumeSection";
 import WorkExperienceResumeSection from "../components/WorkExperienceResumeSection";
 import SkillsInterestsResumeSection from "../components/SkillsInterestsResumeSection";
 import { onAuthStateChanged } from "firebase/auth";
-import { DocumentCreator } from '../server/resume'
+import { DocumentCreator } from "../server/resume";
 import { Packer } from "docx";
-import { saveAs } from 'file-saver'
-import Head from 'next/head'
+import { saveAs } from "file-saver";
+import Head from "next/head";
 
 export default function Generate() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         onValue(child(dbRef, `users/${user.uid}`), (snapshot) => {
           if (typeof window !== "undefined") {
@@ -55,17 +55,17 @@ export default function Generate() {
           }
         });
       } else {
-        router.push("/");    
+        router.push("/");
       }
-    })
+    });
   }, []);
 
-  const toast = useToast()
+  const toast = useToast();
 
   let experienceEntries: WorkExperience[] = [];
   let educationEntries: EducationExperience[] = [];
-  let skillEntries: Skill[] = []
-  let interestEntries: Interest[] = []
+  let skillEntries: Skill[] = [];
+  let interestEntries: Interest[] = [];
 
   function compareSkills(a: Skill, b: Skill) {
     if (a.skillType < b.skillType) {
@@ -120,47 +120,66 @@ export default function Generate() {
   experienceEntries.sort(compare);
   skillEntries.sort(compareSkills);
 
-  const [experienceObject, setExperienceObject] = useState({})
+  const [experienceObject, setExperienceObject] = useState({});
 
-  const workExperienceItems = experienceEntries.map(
-    (entry: WorkExperience) => {
-      return (
-        <WorkExperienceChip entry={entry} key={entry.key} setExperienceObject={setExperienceObject} experienceObject={experienceObject} />
-      );
-    }
-  );
+  const workExperienceItems = experienceEntries.map((entry: WorkExperience) => {
+    return (
+      <WorkExperienceChip
+        entry={entry}
+        key={entry.key}
+        setExperienceObject={setExperienceObject}
+        experienceObject={experienceObject}
+      />
+    );
+  });
 
-  const [skillObject, setSkillObject] = useState({})
+  const [skillObject, setSkillObject] = useState({});
 
   const skillItems = skillEntries.map((entry: Skill) => {
     return (
-      <SkillChip entry={entry} key={entry.key} setSkillObject={setSkillObject} skillObject={skillObject} />
+      <SkillChip
+        entry={entry}
+        key={entry.key}
+        setSkillObject={setSkillObject}
+        skillObject={skillObject}
+      />
     );
   });
 
-  const [interestObject, setInterestObject] = useState({})
+  const [interestObject, setInterestObject] = useState({});
 
   const interestItems = interestEntries.map((entry: Interest) => {
     return (
-      <InterestChip entry={entry} key={entry.key} setInterestObject={setInterestObject} interestObject={interestObject}/>
+      <InterestChip
+        entry={entry}
+        key={entry.key}
+        setInterestObject={setInterestObject}
+        interestObject={interestObject}
+      />
     );
   });
 
-  const [educationObject, setEducationObject] = useState({})
+  const [educationObject, setEducationObject] = useState({});
 
   const educationItems = educationEntries.map((entry: EducationExperience) => {
     return (
-      <EducationChip entry={entry} key={entry.key} setEducationObject={setEducationObject} educationObject={educationObject} />
+      <EducationChip
+        entry={entry}
+        key={entry.key}
+        setEducationObject={setEducationObject}
+        educationObject={educationObject}
+      />
     );
   });
 
   function formatPhoneNum(phone: string): string {
-    let formattedPhone = "(" +
+    let formattedPhone =
+      "(" +
       phone.substring(0, 3) +
       ") " +
       phone.substring(3, 6) +
       "-" +
-      phone.substring(6)
+      phone.substring(6);
 
     return phone !== "" ? formattedPhone : "";
   }
@@ -174,37 +193,36 @@ export default function Generate() {
     ) {
       toast({
         title: "Oops! You didn't select any experiences!",
-        status: 'error',
-        duration: 3000
-      })
-      return; 
+        status: "error",
+        duration: 3000,
+      });
+      return;
     }
     const documentCreator = new DocumentCreator();
     const doc = documentCreator.create([
       experienceObject,
       educationObject,
-      {...skillObject, ...interestObject},
+      { ...skillObject, ...interestObject },
       user,
     ]);
 
     Packer.toBlob(doc).then((blob) => {
       console.log(blob);
-      saveAs(
-        blob,
-        `${user!.firstName} ${user!.lastName} Resume.docx`
-      );
+      saveAs(blob, `${user!.firstName} ${user!.lastName} Resume.docx`);
     });
   }
 
-
   return (
     <>
-    <Head>
-      <title>Reactive Resume</title>
-      <meta name="keywords" content="resume, student, job search, career, easy resume builder"/>
-      <meta name="robots" content="index, follow"/>
-      <meta name="author" content="Jake Ottiger"/>
-    </Head>
+      <Head>
+        <title>Reactive Resume</title>
+        <meta
+          name="keywords"
+          content="resume, student, job search, career, easy resume builder"
+        />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Jake Ottiger" />
+      </Head>
       <Flex
         alignItems={"left"}
         justifyContent="space-between"
@@ -212,29 +230,46 @@ export default function Generate() {
         paddingLeft={"5"}
         paddingBottom={"3"}
         paddingRight={"5"}
-        h="9.5vh"
+        h="70px"
       >
         <IconButton
           aria-label="back"
           icon={<ArrowBackIcon />}
+          bg="#FFFF"
           onClick={() => {
             router.push("/profile");
           }}
+          size="lg"
         />
-        <Button onClick={generate}>Generate Resume</Button>
+        <Button
+          onClick={generate}
+          _hover={{
+            background: "#80DEEA",
+          }}
+          bg="#4DD0E1"
+          size="lg"
+        >
+          Generate Resume
+        </Button>
       </Flex>
       <Divider />
 
       <Flex>
-        <Flex w="50%" justifyContent="center" alignItems='center' pt="5" pb="5">
+        <Flex
+          w={{ base: "100%", sm: "50%", md: "50%", lg: "50%", xl: "50%" }}
+          justifyContent="center"
+          pt="5"
+          pb="5"
+        >
           <Accordion defaultIndex={[0, 1, 2, 3]} w="2xl" allowToggle={false}>
             <AccordionItem>
               <h2>
-                <AccordionButton>
+                <AccordionButton
+                  bg="#E0F2F1"
+                  _hover={{ background: "#E0F8F7" }}
+                >
                   <Box as="span" flex="1" textAlign="left">
-                  <Heading>
-                    Education History
-                    </Heading>
+                    <Heading>Education History</Heading>
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
@@ -248,11 +283,12 @@ export default function Generate() {
 
             <AccordionItem>
               <h2>
-                <AccordionButton>
+                <AccordionButton
+                  bg="#E0F2F1"
+                  _hover={{ background: "#E0F8F7" }}
+                >
                   <Box as="span" flex="1" textAlign="left">
-                    <Heading>
-                    Experience History
-                    </Heading>
+                    <Heading>Experience History</Heading>
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
@@ -265,59 +301,91 @@ export default function Generate() {
             </AccordionItem>
             <AccordionItem>
               <h2>
-                <AccordionButton>
+                <AccordionButton
+                  bg="#E0F2F1"
+                  _hover={{ background: "#E0F8F7" }}
+                >
                   <Box as="span" flex="1" textAlign="left">
-                  <Heading>
-                    Skills
-                    </Heading>
+                    <Heading>Skills</Heading>
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
               </h2>
               <AccordionPanel pb={4}>
-              <VStack spacing="2" alignItems="left">
-                {skillItems}
-              </VStack>
+                <VStack spacing="2" alignItems="left">
+                  {skillItems}
+                </VStack>
               </AccordionPanel>
             </AccordionItem>
             <AccordionItem>
               <h2>
-                <AccordionButton>
+                <AccordionButton
+                  bg="#E0F2F1"
+                  _hover={{ background: "#E0F8F7" }}
+                >
                   <Box as="span" flex="1" textAlign="left">
-                  <Heading>
-                    Interests
-                    </Heading>
+                    <Heading>Interests</Heading>
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
               </h2>
               <AccordionPanel pb={4}>
-              <VStack spacing="2" alignItems="left">
-                {interestItems}
-              </VStack>
+                <VStack spacing="2" alignItems="left">
+                  {interestItems}
+                </VStack>
               </AccordionPanel>
             </AccordionItem>
           </Accordion>
         </Flex>
-          <Card mt="4" w='50%'>
+
+        <Show above="sm">
+          <Card mt="4" w="50%">
             <CardHeader textAlign="center">
               <Heading size="md" mb="1">
-                {user && user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : ''}
+                {user && user.firstName && user.lastName
+                  ? `${user.firstName} ${user.lastName}`
+                  : ""}
               </Heading>
               <Heading size="md" fontWeight="normal">
-                {user && user.email && user.phoneNumber ? `${user.email} | ${formatPhoneNum(user.phoneNumber)}${user.website ? ` | ${user.website}` : ''}` : ""}
+                {user && user.email && user.phoneNumber
+                  ? `${user.email} | ${formatPhoneNum(user.phoneNumber)}${
+                      user.website ? ` | ${user.website}` : ""
+                    }`
+                  : ""}
               </Heading>
             </CardHeader>
 
             <CardBody>
               <Stack spacing="4">
-                {Object.keys(educationObject).length !== 0 || Object.keys(experienceObject).length !== 0 || Object.keys(skillObject).length !== 0 || Object.keys(interestObject).length !== 0 ? <><EducationResumeSection educationObject={educationObject}/>
-                <WorkExperienceResumeSection workExperienceObject={experienceObject}/>
-                <SkillsInterestsResumeSection skillObject={skillObject} interestObject={interestObject} /></> : <><Heading textAlign='center'>Oh no your resume is empty!</Heading> <Heading textAlign='center'>Start building by clicking on the experiences on the left!</Heading></>}
-                </Stack>
+                {Object.keys(educationObject).length !== 0 ||
+                Object.keys(experienceObject).length !== 0 ||
+                Object.keys(skillObject).length !== 0 ||
+                Object.keys(interestObject).length !== 0 ? (
+                  <>
+                    <EducationResumeSection educationObject={educationObject} />
+                    <WorkExperienceResumeSection
+                      workExperienceObject={experienceObject}
+                    />
+                    <SkillsInterestsResumeSection
+                      skillObject={skillObject}
+                      interestObject={interestObject}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Heading textAlign="center">
+                      Oh no your resume is empty!
+                    </Heading>{" "}
+                    <Heading textAlign="center">
+                      Start building by clicking on the experiences on the left!
+                    </Heading>
+                  </>
+                )}
+              </Stack>
             </CardBody>
           </Card>
-        </Flex>
+        </Show>
+      </Flex>
     </>
   );
 }
