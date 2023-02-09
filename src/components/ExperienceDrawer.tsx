@@ -34,7 +34,7 @@ export default function ExperienceDrawer({
   setEdit,
   isEdit,
 }: ExperienceDrawerProps) {
-  const experienceType = useRef<any>(null);
+  const organization = useRef<any>(null);
 
   const successToast = useToast();
 
@@ -183,7 +183,7 @@ export default function ExperienceDrawer({
     <Drawer
       isOpen={isOpen}
       placement="right"
-      initialFocusRef={experienceType}
+      initialFocusRef={organization}
       onClose={closeDrawer}
       size="md"
     >
@@ -226,7 +226,6 @@ export default function ExperienceDrawer({
                         >
                           <Select
                             placeholder="Select Experience Type"
-                            ref={experienceType}
                             {...field}
                           >
                             <option value="work">Work</option>
@@ -262,6 +261,7 @@ export default function ExperienceDrawer({
                             {...field}
                             id="organization"
                             placeholder="Organization Name"
+                            ref={organization}
                           />
                           <FormErrorMessage>
                             {form.errors.organization && form.submitCount > 0}
