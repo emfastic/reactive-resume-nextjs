@@ -361,7 +361,7 @@ export default function ExperienceDrawer({
                           </FormLabel>
                           <Textarea
                             resize="none"
-                            size="xs"
+                            size={["md", "xs"]}
                             placeholder={
                               "\u2022 Descriptive Bullet 1\n\u2022 Descriptive Bullet 2\n\u2022 Descriptive Bullet 3"
                             }
