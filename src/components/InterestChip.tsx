@@ -1,37 +1,40 @@
-import { Tag, TagLabel, Box } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { Tag, TagLabel, Box } from "@chakra-ui/react";
+import React, { useState } from "react";
 
-export default function InterestChip({ entry, setInterestObject, interestObject }: any) {
+export default function InterestChip({
+  entry,
+  setInterestObject,
+  interestObject,
+}: any) {
+  const [clicked, setClicked] = useState(false);
 
-    const [clicked, setClicked] = useState(false)
+  function handleClick() {
+    setClicked(!clicked);
 
-    function handleClick() {
-        setClicked(!clicked)
+    const newObject = { ...interestObject };
 
-        const newObject = {...interestObject}
-
-        // hack for now: don't want to force update needlessly but reading prev clicked val bc of React functionality
-        if (!clicked) {
-            newObject[entry.key] = entry
-        } else {
-            delete newObject[entry.key]
-        }
-        
-        setInterestObject(newObject)
+    // hack for now: don't want to force update needlessly but reading prev clicked val bc of React functionality
+    if (!clicked) {
+      newObject[entry.key] = entry;
+    } else {
+      delete newObject[entry.key];
     }
+
+    setInterestObject(newObject);
+  }
 
   return (
     <Box key={entry.key}>
-        <Tag
-          size="lg"
-          borderRadius="full"
-          variant="solid"
-          colorScheme={clicked ? 'yellow' : 'gray'}
-          cursor={"pointer"}
-          onClick={handleClick}
-        >
-          <TagLabel>{entry.interest}</TagLabel>
-        </Tag>
-      </Box>
-  )
+      <Tag
+        size="lg"
+        borderRadius="full"
+        variant="solid"
+        colorScheme={clicked ? "yellow" : "gray"}
+        cursor={"pointer"}
+        onClick={handleClick}
+      >
+        <TagLabel>{entry.interest}</TagLabel>
+      </Tag>
+    </Box>
+  );
 }

@@ -1,4 +1,13 @@
-import { AlignmentType, convertInchesToTwip, Document, LevelFormat, Paragraph, TabStopPosition, TabStopType, TextRun } from "docx"
+import {
+  AlignmentType,
+  convertInchesToTwip,
+  Document,
+  LevelFormat,
+  Paragraph,
+  TabStopPosition,
+  TabStopType,
+  TextRun,
+} from "docx";
 
 const fontType = "Times New Roman";
 
@@ -115,7 +124,7 @@ export class DocumentCreator {
       alignment: AlignmentType.CENTER,
       children: [
         new TextRun({
-          text: `${email} | ${phone}${website ? ` | ${website}` : ''}`,
+          text: `${email} | ${phone}${website ? ` | ${website}` : ""}`,
           size: 26,
           font: {
             name: fontType,
@@ -190,7 +199,7 @@ export class DocumentCreator {
         new TextRun({
           text: `${degreeType} in ${major}${
             minor ? ", Minor in " + minor : ""
-          } ${gpa !== '0.00' ? "| " + gpa + "/4.00" : ""}`,
+          } ${gpa !== "0.00" ? "| " + gpa + "/4.00" : ""}`,
           italics: true,
           font: {
             name: fontType,
@@ -484,9 +493,9 @@ export class DocumentCreator {
       "07": "July",
       "08": "August",
       "09": "September",
-      "10": "October",
-      "11": "November",
-      "12": "December",
+      10: "October",
+      11: "November",
+      12: "December",
     };
 
     return date === "Present"

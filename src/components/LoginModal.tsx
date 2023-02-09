@@ -9,6 +9,8 @@ import {
   Divider,
   Heading,
   Flex,
+  defineStyle,
+  defineStyleConfig,
 } from "@chakra-ui/react";
 import React from "react";
 import { LoginModalProps } from "@/types/component";
@@ -23,20 +25,31 @@ export default function LoginModal({
 }: LoginModalProps) {
   return (
     <>
-      <Button onClick={onOpen}>{text}</Button>
+      <Button
+        onClick={onOpen}
+        size="lg"
+        bg="#4DD0E1"
+        _hover={{
+          background: "#80DEEA",
+        }}
+        mr="5"
+      >
+        {text}
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
           <Divider />
-          <ModalHeader></ModalHeader>
+          <ModalHeader textAlign="center">Reactive Resume</ModalHeader>
+          <Divider />
           <ModalBody>
             <Heading
               size="lg"
               fontWeight={"semibold"}
               textAlign="center"
-              padding={"100"}
+              padding={["50", "100"]}
             >
               Start building your resume.
             </Heading>

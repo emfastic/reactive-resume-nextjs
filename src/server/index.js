@@ -19,7 +19,7 @@ const firebaseConfig = {
   projectId: "reactive-resume-next",
   storageBucket: "reactive-resume-next.appspot.com",
   messagingSenderId: "290858760980",
-  appId: "1:290858760980:web:e95a4ebd0170ad7e026001"
+  appId: "1:290858760980:web:e95a4ebd0170ad7e026001",
 };
 
 // Initialize Firebase

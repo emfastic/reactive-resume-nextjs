@@ -1,25 +1,33 @@
-import { Box, Divider, Flex, Heading, ListItem, UnorderedList } from '@chakra-ui/react'
-import React from 'react'
-import { WorkExperience } from '@/types/component.js';
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  ListItem,
+  UnorderedList,
+} from "@chakra-ui/react";
+import React from "react";
+import { WorkExperience } from "@/types/component.js";
 
-export default function WorkExperienceResumeSection({ workExperienceObject }: any) {
+export default function WorkExperienceResumeSection({
+  workExperienceObject,
+}: any) {
+  const researchExperienceList: WorkExperience[] = [];
+  const workExperienceList: WorkExperience[] = [];
+  const extracurricularExperienceList: WorkExperience[] = [];
 
-    const researchExperienceList: WorkExperience[] = []
-    const workExperienceList: WorkExperience[] = []
-    const extracurricularExperienceList: WorkExperience[] = []
+  function compareDates(a: WorkExperience, b: WorkExperience) {
+    if (a.endDate < b.endDate) {
+      return 1;
+    }
+    if (a.endDate > b.endDate) {
+      return -1;
+    }
+    return 0;
+  }
 
-    function compareDates(a: WorkExperience, b: WorkExperience) {
-        if (a.endDate < b.endDate) {
-          return 1;
-        }
-        if (a.endDate > b.endDate) {
-          return -1;
-        }
-        return 0;
-      }
-
-    function formatDate(date: string): string {
-    const months: {[key: string]: string} = {
+  function formatDate(date: string): string {
+    const months: { [key: string]: string } = {
       "01": "January",
       "02": "February",
       "03": "March",
@@ -39,138 +47,148 @@ export default function WorkExperienceResumeSection({ workExperienceObject }: an
       : months[date.slice(5)] + " " + date.slice(0, 4);
   }
 
-    // Seperate experience object into resume sections
-    Object.keys(workExperienceObject).forEach(key => {
-        if (workExperienceObject[key]['experienceType'] === 'work') {
-            workExperienceList.push(workExperienceObject[key])
-        } else if (workExperienceObject[key]['experienceType'] === 'research') {
-            researchExperienceList.push(workExperienceObject[key])
-        } else if (workExperienceObject[key]['experienceType'] === 'extracurricular') {
-            extracurricularExperienceList.push(workExperienceObject[key])
-        }
-    })
+  // Seperate experience object into resume sections
+  Object.keys(workExperienceObject).forEach((key) => {
+    if (workExperienceObject[key]["experienceType"] === "work") {
+      workExperienceList.push(workExperienceObject[key]);
+    } else if (workExperienceObject[key]["experienceType"] === "research") {
+      researchExperienceList.push(workExperienceObject[key]);
+    } else if (
+      workExperienceObject[key]["experienceType"] === "extracurricular"
+    ) {
+      extracurricularExperienceList.push(workExperienceObject[key]);
+    }
+  });
 
-    workExperienceList.sort(compareDates)
-    researchExperienceList.sort(compareDates)
-    extracurricularExperienceList.sort(compareDates)
+  workExperienceList.sort(compareDates);
+  researchExperienceList.sort(compareDates);
+  extracurricularExperienceList.sort(compareDates);
 
-    const workExperienceItems = workExperienceList.map((workObject: WorkExperience) => {
+  const workExperienceItems = workExperienceList.map(
+    (workObject: WorkExperience) => {
+      // CSVed description
+      const descriptionList = workObject.description.split(",,");
 
-        // CSVed description
-        const descriptionList = workObject.description.split(',,')
+      const descriptionItems = descriptionList.map((value, idx) => {
+        return <ListItem key={idx}>{value}</ListItem>;
+      });
 
-        const descriptionItems = descriptionList.map((value, idx) => {
-            return <ListItem key={idx}>{value}</ListItem>
-        })
-
-        return (
-            <Box key={workObject.key} mb='2'>
-            <Flex justify='space-between' fontWeight={'semibold'}>
-                <Box>
-                    {workObject.organization}
-                </Box>
-                <Box>
-                    {workObject.location}
-                </Box>
-            </Flex>
-            <Flex justify='space-between'>
-                <Box>
-            {workObject.title}
-            </Box>
+      return (
+        <Box key={workObject.key} mb="2">
+          <Flex justify="space-between" fontWeight={"semibold"}>
+            <Box>{workObject.organization}</Box>
+            <Box>{workObject.location}</Box>
+          </Flex>
+          <Flex justify="space-between">
+            <Box>{workObject.title}</Box>
             <Box>
-                {formatDate(workObject.startDate)} - {formatDate(workObject.endDate)}
+              {formatDate(workObject.startDate)} -{" "}
+              {formatDate(workObject.endDate)}
             </Box>
-            </Flex>
-            <UnorderedList mt='3' mb='3'>
-                {descriptionItems}
-            </UnorderedList>
-            </Box>
-        )
-    })
+          </Flex>
+          <UnorderedList mt="3" mb="3">
+            {descriptionItems}
+          </UnorderedList>
+        </Box>
+      );
+    }
+  );
 
-    const researchExperienceItems = researchExperienceList.map((workObject: WorkExperience) => {
+  const researchExperienceItems = researchExperienceList.map(
+    (workObject: WorkExperience) => {
+      // CSVed description
+      const descriptionList = workObject.description.split(",,");
 
-        // CSVed description
-        const descriptionList = workObject.description.split(',,')
+      const descriptionItems = descriptionList.map((value, idx) => {
+        return <ListItem key={idx}>{value}</ListItem>;
+      });
 
-        const descriptionItems = descriptionList.map((value, idx) => {
-            return <ListItem key={idx}>{value}</ListItem>
-        })
-
-        return (
-            <Box key={workObject.key} mb='2'>
-            <Flex justify='space-between' fontWeight={'semibold'}>
-                <Box>
-                    {workObject.organization}
-                </Box>
-                <Box>
-                    {workObject.location}
-                </Box>
-            </Flex>
-            <Flex justify='space-between'>
-                <Box>
-            {workObject.title}
-            </Box>
+      return (
+        <Box key={workObject.key} mb="2">
+          <Flex justify="space-between" fontWeight={"semibold"}>
+            <Box>{workObject.organization}</Box>
+            <Box>{workObject.location}</Box>
+          </Flex>
+          <Flex justify="space-between">
+            <Box>{workObject.title}</Box>
             <Box>
-                {formatDate(workObject.startDate)} - {formatDate(workObject.endDate)}
+              {formatDate(workObject.startDate)} -{" "}
+              {formatDate(workObject.endDate)}
             </Box>
-            </Flex>
-            <UnorderedList mt='3' mb='3'>
-                {descriptionItems}
-            </UnorderedList>
-            </Box>
-        )
-    })
+          </Flex>
+          <UnorderedList mt="3" mb="3">
+            {descriptionItems}
+          </UnorderedList>
+        </Box>
+      );
+    }
+  );
 
-    const extracurricularExperienceItems = extracurricularExperienceList.map((workObject: WorkExperience) => {
+  const extracurricularExperienceItems = extracurricularExperienceList.map(
+    (workObject: WorkExperience) => {
+      // CSVed description
+      const descriptionList = workObject.description.split(",,");
 
-        // CSVed description
-        const descriptionList = workObject.description.split(',,')
+      const descriptionItems = descriptionList.map((value, idx) => {
+        return <ListItem key={idx}>{value}</ListItem>;
+      });
 
-        const descriptionItems = descriptionList.map((value, idx) => {
-            return <ListItem key={idx}>{value}</ListItem>
-        })
-
-        return (
-            <Box key={workObject.key} mb='2'>
-            <Flex justify='space-between' fontWeight={'semibold'}>
-                <Box>
-                    {workObject.organization}
-                </Box>
-                <Box>
-                    {workObject.location}
-                </Box>
-            </Flex>
-            <Flex justify='space-between'>
-                <Box>
-            {workObject.title}
-            </Box>
+      return (
+        <Box key={workObject.key} mb="2">
+          <Flex justify="space-between" fontWeight={"semibold"}>
+            <Box>{workObject.organization}</Box>
+            <Box>{workObject.location}</Box>
+          </Flex>
+          <Flex justify="space-between">
+            <Box>{workObject.title}</Box>
             <Box>
-                {formatDate(workObject.startDate)} - {formatDate(workObject.endDate)}
+              {formatDate(workObject.startDate)} -{" "}
+              {formatDate(workObject.endDate)}
             </Box>
-            </Flex>
-            <UnorderedList mt='3' mb='3'>
-                {descriptionItems}
-            </UnorderedList>
-            </Box>
-        )
-    })
-
+          </Flex>
+          <UnorderedList mt="3" mb="3">
+            {descriptionItems}
+          </UnorderedList>
+        </Box>
+      );
+    }
+  );
 
   return (
     <Box>
-                  {workExperienceList.length !== 0 ? (<><Heading size="sm" textTransform="uppercase" mb='2'>
-                    Work Experience
-                  </Heading> <Divider /></>) : (<></>)}
-                  {workExperienceItems}
-                  {researchExperienceList.length !== 0 ? (<><Heading size="sm" textTransform="uppercase" mb='2'>
-                    Research Experience
-                  </Heading> <Divider /></>) : (<></>)}
-                  {researchExperienceItems}
-                  {extracurricularExperienceList.length !== 0 ? (<><Heading size="sm" textTransform="uppercase" mb='2'>
-                    Extracurricular Experience
-                  </Heading> <Divider /></>) : (<></>)}
-                  {extracurricularExperienceItems}
-                </Box>
-  )
+      {workExperienceList.length !== 0 ? (
+        <>
+          <Heading size="sm" textTransform="uppercase" mb="2">
+            Work Experience
+          </Heading>{" "}
+          <Divider />
+        </>
+      ) : (
+        <></>
+      )}
+      {workExperienceItems}
+      {researchExperienceList.length !== 0 ? (
+        <>
+          <Heading size="sm" textTransform="uppercase" mb="2">
+            Research Experience
+          </Heading>{" "}
+          <Divider />
+        </>
+      ) : (
+        <></>
+      )}
+      {researchExperienceItems}
+      {extracurricularExperienceList.length !== 0 ? (
+        <>
+          <Heading size="sm" textTransform="uppercase" mb="2">
+            Extracurricular Experience
+          </Heading>{" "}
+          <Divider />
+        </>
+      ) : (
+        <></>
+      )}
+      {extracurricularExperienceItems}
+    </Box>
+  );
 }
